@@ -8,6 +8,6 @@ import com.hexaware.fastx.entities.Admin;
 @Repository
 public interface AdminRepository extends JpaRepository<Admin,Integer> {
 
-	String findByName(String name);
+	Admin findByName(String name);
 
 }

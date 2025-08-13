@@ -26,7 +26,7 @@ public class BusDto {
     @Min(value = 1, message = "Total seats must be at least 1")
     private int totalSeats;
 
-    //give validation
+    @Pattern(regexp = "^(Water bottle| Blanket| Charging point|Tv)$", message = "Amenties available: Water bottle, blanket, charging port and tv")
     private String amenities;
 
     @Min(value = 1, message = "Operator ID must be greater than 0")

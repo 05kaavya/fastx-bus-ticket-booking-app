@@ -32,6 +32,9 @@ public class RouteDto {
 
     @NotNull(message = "Arrival time cannot be null")
     private LocalDateTime arrivalTime;
+    
+    @Min(value = 1, message = "Distance must be greater than 0")
+    private double distance;
 
     @NotNull(message = "Fare cannot be null")
     private BigDecimal fare;
@@ -44,6 +47,7 @@ public class RouteDto {
 	  route.setDestination(this.destination);
 	  route.setDepartureTime(this.departureTime);
 	  route.setArrivalTime(this.arrivalTime); 
+	  route.setDistance(this.distance);
 	  route.setFare(this.fare); 
 	  return route; }
 	 

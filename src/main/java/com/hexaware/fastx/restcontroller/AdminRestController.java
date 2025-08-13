@@ -36,7 +36,7 @@ public class AdminRestController {
     }
 
     @GetMapping("/name/{name}")
-    public String getAdminByName(@PathVariable String name) {
+    public Admin getAdminByName(@PathVariable String name) {
         return service.getAdminByName(name);
     }
 }

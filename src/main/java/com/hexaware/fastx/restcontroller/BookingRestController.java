@@ -3,11 +3,15 @@ package com.hexaware.fastx.restcontroller;
 import com.hexaware.fastx.dto.BookingDto;
 import com.hexaware.fastx.entities.Booking;
 import com.hexaware.fastx.service.IBookingService;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/bookings")
 public class BookingRestController {
@@ -17,28 +21,31 @@ public class BookingRestController {
 
     @PostMapping("/add")
     public Booking addBooking(@RequestBody BookingDto dto) {
-        Booking booking = dto.toEntity();
-        return service.addBooking(booking);
-    }
+    	   log.info("Adding booking for user ID: {}", dto.getUserId());
+           return service.addBooking(dto.toEntity());
+       }
 
     @PutMapping("/update")
     public Booking updateBooking(@RequestBody BookingDto dto) {
-        Booking booking = dto.toEntity();
-        return service.updateBooking(booking);
-    }
+    	 log.info("Updating booking ID: {}", dto.getBookingId());
+         return service.updateBooking(dto.toEntity());
+     }
 
     @GetMapping("/get/{bookingId}")
     public Booking getBookingById(@PathVariable int bookingId) {
+    	log.info("Fetching booking by ID: {}", bookingId);
         return service.getBookingById(bookingId);
     }
 
     @GetMapping("/getall")
     public List<Booking> getAllBookings() {
+    	log.info("Fetching all bookings");
         return service.getAllBookings();
     }
 
     @DeleteMapping("/delete/{bookingId}")
     public String deleteBooking(@PathVariable int bookingId) {
+    	log.info("Deleting booking ID: {}", bookingId);
         return service.deleteByBookingId(bookingId);
     }
 }

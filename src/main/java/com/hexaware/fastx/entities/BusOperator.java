@@ -1,15 +1,19 @@
 package com.hexaware.fastx.entities;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+//import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Entity
@@ -32,6 +36,8 @@ public class BusOperator {
 
     private Timestamp createdAt;
     
-    @OneToMany(mappedBy = "operator", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ToString.Exclude
     private List<Bus> buses;
 }

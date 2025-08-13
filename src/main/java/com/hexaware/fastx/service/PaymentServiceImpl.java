@@ -1,7 +1,7 @@
 package com.hexaware.fastx.service;
 
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 //import java.time.LocalDate;
 import java.util.List;
 
@@ -9,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.fastx.entities.Payment;
+import com.hexaware.fastx.exception.ResourceNotFoundException;
 import com.hexaware.fastx.repository.PaymentRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class PaymentServiceImpl implements IPaymentService {
 
@@ -19,31 +23,46 @@ public class PaymentServiceImpl implements IPaymentService {
 
     @Override
     public Payment processPayment(Payment payment) {
+        log.info("Processing payment for booking ID: {}", payment.getBooking().getBookingId());
+
         return paymentRepository.save(payment);
     }
 
     @Override
     public Payment getPaymentByBookingId(int bookingId) {
-        return paymentRepository.findByBookingBookingId(bookingId);
+    	log.info("Fetching payment by booking ID: {}", bookingId);
+        return paymentRepository.findByBookingBookingId(bookingId) .orElseThrow(() -> new ResourceNotFoundException("Payment not found for booking ID: " + bookingId));
     }
 
     @Override
     public List<Payment> getPaymentsByUserId(int userId) {
-        return paymentRepository.findByBookingUserUserId(userId);
+    	log.info("Fetching payments for user ID: {}", userId);
+    	List<Payment> payments = paymentRepository.findByBookingUserUserId(userId);
+        if (payments.isEmpty()) {
+            throw new ResourceNotFoundException("No payments found for user ID: " + userId);
+        }
+        return payments;
     }
 
     @Override
     public List<Payment> getPaymentsByPaymentStatus(String paymentStatus) {
-        return paymentRepository.findByPaymentStatus(paymentStatus);
+    	log.info("Fetching payments with status: {}", paymentStatus);
+    	List<Payment> payments = paymentRepository.findByPaymentStatus(paymentStatus);
+        if (payments.isEmpty()) {
+            throw new ResourceNotFoundException("No payments found with status: " + paymentStatus);
+        }
+        return payments;
     }
 
     @Override
     public BigDecimal getTotalRevenueByDate(Timestamp paymentDate) {
+    	log.info("Calculating total revenue for date: {}", paymentDate);
         return paymentRepository.findTotalAmountByPaymentDate(paymentDate);
     }
 
     @Override
     public boolean isPaymentSuccessfulForBooking(int bookingId) {
+    	 log.info("Checking payment success for booking ID: {}", bookingId);
         return paymentRepository.existsByBookingBookingIdAndPaymentStatus(bookingId, "Paid");
     }
 }

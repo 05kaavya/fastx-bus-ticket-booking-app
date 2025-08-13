@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.fastx.entities.Bus;
+import com.hexaware.fastx.exception.ResourceNotFoundException;
 import com.hexaware.fastx.repository.BusRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class BusServiceImpl implements IBusService {
 
@@ -16,33 +20,54 @@ public class BusServiceImpl implements IBusService {
 
     @Override
     public Bus addBus(Bus bus) {
+        log.info("Adding bus: {}", bus.getBusName());
         return busRepository.save(bus);
     }
 
     @Override
     public Bus getBusById(int busId) {
-        return busRepository.findById(busId).orElse(null);
+    	log.info("Fetching bus by ID: {}", busId);
+        return busRepository.findById(busId).orElseThrow(() -> new ResourceNotFoundException("Bus not found with ID: " + busId));
+
     }
 
     @Override
     public Bus findByName(String busName) {
-        return busRepository.findByBusName(busName);
+    	log.info("Fetching bus by name: {}", busName);
+    	Bus bus = busRepository.findByBusName(busName);
+        if (bus == null) {
+            throw new ResourceNotFoundException("Bus not found with name: " + busName);
+        }
+        return bus;
     }
 
     @Override
     public Bus updateBus(Bus bus) {
+        log.info("Updating bus ID: {}", bus.getBusId());
+
+    	if (!busRepository.existsById(bus.getBusId())) {
+            throw new ResourceNotFoundException("Bus not found with ID: " + bus.getBusId());
+        }
         return busRepository.save(bus);
     }
 
     @Override
     public List<Bus> getAllBuses() {
-        return busRepository.findAll();
+    	log.info("Fetching all buses");
+    	List<Bus> buses = busRepository.findAll();
+        if (buses.isEmpty()) {
+            throw new ResourceNotFoundException("No buses found");
+        }
+        return buses;
     }
 
     @Override
     public String deleteBus(int busId) {
-        busRepository.deleteById(busId);
-        return "Bus deleted successfully: " + busId;
+    	log.info("Deleting bus ID: {}", busId);
+    	Bus bus = busRepository.findById(busId)
+                .orElseThrow(() -> new ResourceNotFoundException("Bus not found with ID: " + busId));
+    	busRepository.delete(bus);
+        return "Bus deleted successfully " ;
     }
 }
 

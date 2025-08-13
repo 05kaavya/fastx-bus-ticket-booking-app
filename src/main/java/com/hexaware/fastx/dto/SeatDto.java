@@ -20,10 +20,12 @@ public class SeatDto {
     @Pattern(regexp = "^[A-Z]\\d{1,2}$", message = "Seat number must be like A1, B2, etc.")
     private String seatNumber;
     
-    //give validation
+    @Pattern(regexp = "^(Window|Sleeper|A/C|Non-A/C)$", message = "Seats Available : Window,sleepr,A/C and Non-A/C")
     private String seatType;
+    
+   // private boolean isBooked = false;
 
-    //validation
+    @Pattern(regexp = "^(Available|Booked)$")
     private String seatStatus;
 
 	
@@ -35,6 +37,9 @@ public class SeatDto {
 	  seat.setSeatStatus(this.seatStatus); 
 	  return seat; 
 	  }
+
+
+	
 	 
 }
 

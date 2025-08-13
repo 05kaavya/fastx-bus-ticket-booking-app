@@ -1,13 +1,16 @@
 package com.hexaware.fastx.entities;
 
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 //import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+//import jakarta.persistence.CascadeType;
 //import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -34,20 +37,23 @@ public class Booking {
 	 
 	 private String status;
 	 
-	 @ManyToOne
+	 @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "user_id")
+	    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	    private User user;
 
-	    @ManyToOne
+	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "route_id")
+	    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	    private Route route;
 
-	    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+	    // Payment/Cancellation own the FK to Booking
+	    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
 	    private Payment payment;
 
-	    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+	    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
 	    private Cancellation cancellation;
 
-	    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+	    @OneToMany(mappedBy = "booking", fetch = FetchType.LAZY)
 	    private List<BookingSeat> bookingSeats;
 }

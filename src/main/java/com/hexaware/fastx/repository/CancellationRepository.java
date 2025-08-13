@@ -9,10 +9,11 @@ import java.math.BigDecimal;
 //import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface CancellationRepository extends JpaRepository<Cancellation, Integer> {
 	
-	  Cancellation findByBookingBookingId(int bookingId); 
+	  Optional <Cancellation >findByBookingBookingId(int bookingId); 
 	  List<Cancellation> findByBookingUserUserId(int userId); 
 	  List<Cancellation> findByRefundStatus(String refundStatus);
 	  boolean existsByBookingBookingId(int bookingId);

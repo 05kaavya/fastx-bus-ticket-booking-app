@@ -10,6 +10,6 @@ public interface IAdminService {
 	public Admin getAdminById(int adminId);
     public  List<Admin> getAllAdmins();
     public String deleteAdminById(int adminId); 
-    public String getAdminByName(String name);
+    public Admin getAdminByName(String name);
 
 }

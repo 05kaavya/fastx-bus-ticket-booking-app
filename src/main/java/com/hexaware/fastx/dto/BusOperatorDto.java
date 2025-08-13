@@ -22,7 +22,8 @@ public class BusOperatorDto {
     @NotBlank(message = "Email cannot be blank")
     private String email;
     
-    //give validation
+    @Pattern(regexp = "^(?=.{8,20}$)(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
+    	     message = "Password must be 8-20 chars, include upper & lower case letters, a digit and a special character")
     private String password;
 
     @NotBlank(message = "Contact number cannot be blank")
