@@ -11,6 +11,22 @@ import com.hexaware.fastx.repository.RouteRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Service implementation for managing bus routes in the system.
+ *
+ * Responsibilities:
+ * - Add new routes
+ * - Retrieve route details by route ID
+ * - Retrieve all available routes
+ * - Delete a route by its ID
+ *
+ * Uses {@link RouteRepository} for database operations.
+ * Throws {@link ResourceNotFoundException} when a requested route is not found.
+ *
+ * Logging (via Lombok's @Slf4j) is implemented for tracking key service actions,
+ * aiding in debugging, monitoring, and auditing.
+ */
+
 @Slf4j
 @Service
 public class RouteServiceImpl implements IRouteService {

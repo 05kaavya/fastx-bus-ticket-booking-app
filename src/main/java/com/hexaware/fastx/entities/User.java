@@ -38,7 +38,7 @@ public class User {
     private String address;
     
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(updatable = false)
     private Timestamp createdAt;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch=FetchType.LAZY)

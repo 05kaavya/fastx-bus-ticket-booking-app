@@ -6,11 +6,14 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 //import jakarta.persistence.CascadeType;
 //import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -25,19 +28,30 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Table(name="bookings")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Booking {
 	
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	 private int bookingId;
+	
+	 private String seatNumber;
+	 private String passengerName;
+	 private Gender passengerGender;
 	 
+	 public enum Gender {
+	        Male, Female, Other
+	    }
+	 
+	 private String seatType;
 	 private Timestamp bookingDate;
 	 private BigDecimal totalAmount;
 	 
 	 
 	 private String status;
 	 
-	 @ManyToOne(fetch = FetchType.LAZY)
+	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "user_id")
 	    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	    private User user;

@@ -10,6 +10,7 @@ import com.hexaware.fastx.entities.User;
 	public interface IUserService {
 		
 		public User registerUser(User user);
+		public User loginUser(String email, String password);
 		public User getUserById(int userId);
 		public User updateUser(User user);
 		public List<User> getAllUsers();

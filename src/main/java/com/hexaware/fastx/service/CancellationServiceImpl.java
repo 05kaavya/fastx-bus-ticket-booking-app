@@ -15,6 +15,22 @@ import com.hexaware.fastx.repository.CancellationRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Service implementation for handling booking cancellations in the system.
+ *
+ * Responsibilities:
+ * - Cancel bookings and persist cancellation details
+ * - Retrieve cancellations by booking ID, user ID, or refund status
+ * - Check if a booking is already cancelled
+ * - Calculate total refunds issued on a specific date
+ *
+ * Utilizes CancellationRepository for database operations.
+ * Throws ResourceNotFoundException when no matching cancellation is found.
+ *
+ * Logging (via Lombok's @Slf4j) is used to trace key service operations
+ * for debugging, monitoring, and auditing purposes.
+ */
+
 @Slf4j
 @Service
 public class CancellationServiceImpl implements ICancellationService {
@@ -24,6 +40,7 @@ public class CancellationServiceImpl implements ICancellationService {
 
     @Override
     public Cancellation cancelBooking(Cancellation cancellation) {
+    	
     	log.info("Cancelling booking ID: {}", cancellation.getBooking().getBookingId());
         return cancellationRepository.save(cancellation);
     }

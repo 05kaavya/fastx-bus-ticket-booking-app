@@ -11,6 +11,22 @@ import com.hexaware.fastx.repository.SeatRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Service implementation for managing seat operations in the system.
+ *
+ * Responsibilities:
+ * - Add new seats
+ * - Update existing seat details
+ * - Retrieve seats by bus ID, seat status, or seat type
+ * - Delete a seat by its ID
+ *
+ * Uses {@link SeatRepository} for database interactions.
+ * Throws {@link ResourceNotFoundException} when a requested seat is not found.
+ *
+ * Logging (via Lombok's @Slf4j) is used to track key service operations,
+ * aiding in debugging, monitoring, and auditing.
+ */
+
 @Slf4j
 @Service
 public class SeatServiceImpl implements ISeatService {

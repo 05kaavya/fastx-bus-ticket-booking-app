@@ -4,6 +4,7 @@ import com.hexaware.fastx.dto.BookingDto;
 import com.hexaware.fastx.entities.Booking;
 import com.hexaware.fastx.service.IBookingService;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,13 @@ public class BookingRestController {
     private IBookingService service;
 
     @PostMapping("/add")
-    public Booking addBooking(@RequestBody BookingDto dto) {
+    public Booking addBooking( @Valid @RequestBody BookingDto dto) {
     	   log.info("Adding booking for user ID: {}", dto.getUserId());
-           return service.addBooking(dto.toEntity());
+           return service.addBooking(dto);
        }
 
     @PutMapping("/update")
-    public Booking updateBooking(@RequestBody BookingDto dto) {
+    public Booking updateBooking( @Valid @RequestBody BookingDto dto) {
     	 log.info("Updating booking ID: {}", dto.getBookingId());
          return service.updateBooking(dto.toEntity());
      }

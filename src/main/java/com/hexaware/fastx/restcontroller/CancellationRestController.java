@@ -23,6 +23,7 @@ public class CancellationRestController {
 
     @PostMapping("/cancel")
     public Cancellation cancelBooking(@RequestBody CancellationDto dto) {
+    	
     	   log.info("Cancelling booking ID: {}", dto.getBookingId());
            return service.cancelBooking(dto.toEntity());
        }

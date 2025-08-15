@@ -12,6 +12,26 @@ import com.hexaware.fastx.repository.AdminRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+
+/**
+ * Service implementation for managing Admin-related operations.
+ * 
+ * This class contains business logic for:
+ * - Adding new admins with duplicate check
+ * - Fetching admins by ID or name
+ * - Retrieving all admins
+ * - Deleting admins by ID
+ * 
+ * Uses AdminRepository to interact with the database.
+ * Throws custom exceptions (DuplicateResourceException, ResourceNotFoundException)
+ * when invalid operations are performed.
+ * 
+ * Logging is enabled using Lombok's @Slf4j for tracking operations.
+ * 
+ * Author: S.G.Kaviya
+ * Date: 14-08-2025
+ */
+
 @Slf4j
 @Service
 public class AdminServiceImpl implements IAdminService {

@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import com.hexaware.fastx.entities.Bus;
 import com.hexaware.fastx.entities.Route;
 
 @Data
@@ -40,15 +42,25 @@ public class RouteDto {
     private BigDecimal fare;
 
 	
-	  public Route toEntity() { 
-		  Route route = new Route();
-	  route.setRouteId(this.routeId); 
-	  route.setOrigin(this.origin);
-	  route.setDestination(this.destination);
-	  route.setDepartureTime(this.departureTime);
-	  route.setArrivalTime(this.arrivalTime); 
-	  route.setDistance(this.distance);
-	  route.setFare(this.fare); 
-	  return route; }
+    public Route toEntity() {
+        Route route = new Route();
+        route.setRouteId(this.routeId);
+        route.setOrigin(this.origin);
+        route.setDestination(this.destination);
+        route.setDepartureTime(this.departureTime);
+        route.setArrivalTime(this.arrivalTime);
+        route.setDistance(this.distance);
+        route.setFare(this.fare);
+
+        // Link bus by ID
+        if (this.busId != 0) {
+            Bus bus = new Bus();
+            bus.setBusId(this.busId);
+            route.setBus(bus);
+        }
+
+        return route;
+    }
+
 	 
 }

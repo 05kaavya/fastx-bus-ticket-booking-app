@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.hexaware.fastx.entities.Bus;
+import com.hexaware.fastx.entities.BusOperator;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +22,7 @@ public class BusDto {
     private String busNumber;
 
     @NotBlank(message = "Bus type cannot be blank")
+    @Pattern(regexp = "^(Sleeper|A/C|Non-A/C)$")
     private String busType;
 
     @Min(value = 1, message = "Total seats must be at least 1")
@@ -33,14 +35,24 @@ public class BusDto {
     private int operatorId;
 
 	
-	  public Bus toEntity() {
-	  Bus bus = new Bus(); 
-	  bus.setBusId(this.busId);
-	  bus.setBusName(this.busName); 
-	  bus.setBusNumber(this.busNumber);
-	  bus.setBusType(this.busType); 
-	  bus.setTotalSeats(this.totalSeats);
-	  bus.setAmenities(this.amenities); 
-	  return bus; }
+    public Bus toEntity() {
+        Bus bus = new Bus();
+        bus.setBusId(this.busId);
+        bus.setBusName(this.busName);
+        bus.setBusNumber(this.busNumber);
+        bus.setBusType(this.busType);
+        bus.setTotalSeats(this.totalSeats);
+        bus.setAmenities(this.amenities);
+
+        // Link operator using ID
+        if (this.operatorId != 0) {
+            BusOperator operator = new BusOperator();
+            operator.setOperatorId(this.operatorId);
+            bus.setOperator(operator);
+        }
+
+        return bus;
+    }
+
 	 
 }

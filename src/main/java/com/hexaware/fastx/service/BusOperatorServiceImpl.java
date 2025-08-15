@@ -12,6 +12,21 @@ import com.hexaware.fastx.repository.BusOperatorRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Service implementation for managing Bus Operators in the system.
+ *
+ * Responsibilities:
+ * - Add new bus operators
+ * - Retrieve bus operators by ID
+ * - Fetch all bus operators
+ * - Delete bus operators by their ID
+ *
+ * Utilizes BusOperatorRepository for database interactions.
+ * Throws ResourceNotFoundException when requested data is not found.
+ *
+ * Logging (via Lombok's @Slf4j) is used to record major operations for debugging and auditing purposes.
+ */
+
 @Slf4j
 @Service
 public class BusOperatorServiceImpl implements IBusOperatorService {

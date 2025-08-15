@@ -13,6 +13,20 @@ import com.hexaware.fastx.repository.BookingSeatRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+
+/**
+ * Service implementation for managing booking seat assignments.
+ * 
+ * Responsibilities:
+ * - Assign seats to a booking
+ * - Retrieve seats associated with a specific booking ID
+ * 
+ * Uses BookingSeatRepository to interact with the database.
+ * Throws ResourceNotFoundException when no seats are found for the given booking.
+ * 
+ * Logging is enabled via Lombok's @Slf4j to track seat assignment and retrieval operations.
+ */
+
 @Slf4j
 @Service
 public class BookingSeatServiceImpl implements IBookingSeatService {

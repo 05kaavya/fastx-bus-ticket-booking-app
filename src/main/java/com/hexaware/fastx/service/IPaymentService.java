@@ -5,11 +5,12 @@ import java.sql.Timestamp;
 //import java.time.LocalDate;
 import java.util.List;
 
+import com.hexaware.fastx.dto.PaymentDto;
 import com.hexaware.fastx.entities.Payment;
 
 public interface IPaymentService {
 
-	public Payment processPayment(Payment payment);
+	public Payment processPayment(PaymentDto paymentDto);
 	public Payment getPaymentByBookingId(int bookingId);
 	public List<Payment> getPaymentsByUserId(int userId);
 	public List<Payment> getPaymentsByPaymentStatus(String paymentStatus);

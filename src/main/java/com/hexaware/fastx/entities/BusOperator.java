@@ -3,11 +3,16 @@ package com.hexaware.fastx.entities;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 //import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -24,6 +29,7 @@ public class BusOperator {
 	
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int operatorId;
 
     private String operatorName;
@@ -34,6 +40,8 @@ public class BusOperator {
    
     private String address;
 
+    @CreationTimestamp
+    @Column(updatable = false)
     private Timestamp createdAt;
     
     @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY)

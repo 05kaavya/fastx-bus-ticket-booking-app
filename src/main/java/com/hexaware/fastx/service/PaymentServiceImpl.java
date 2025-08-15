@@ -8,11 +8,28 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hexaware.fastx.dto.PaymentDto;
+import com.hexaware.fastx.entities.Booking;
 import com.hexaware.fastx.entities.Payment;
 import com.hexaware.fastx.exception.ResourceNotFoundException;
+import com.hexaware.fastx.repository.BookingRepository;
 import com.hexaware.fastx.repository.PaymentRepository;
 
 import lombok.extern.slf4j.Slf4j;
+
+/**
+ * Service implementation for managing and processing payments in the system.
+ *
+ * Responsibilities:
+ * - Process and store new payment records
+ * - Retrieve payments by booking ID, user ID, or payment status
+ * - Calculate total revenue for a given date
+ * - Check if a booking has a successful payment
+ *
+ *
+ * Logging (via Lombok's @Slf4j) is used to track key service actions for
+ * debugging, monitoring, and auditing purposes.
+ */
 
 @Slf4j
 @Service
@@ -20,9 +37,20 @@ public class PaymentServiceImpl implements IPaymentService {
 
     @Autowired
     PaymentRepository paymentRepository;
+    
+    BookingRepository bookingRepository;
 
     @Override
-    public Payment processPayment(Payment payment) {
+    public Payment processPayment(PaymentDto paymentDto) {
+    	 Payment payment = new Payment();
+    	    payment.setAmountPaid(paymentDto.getAmountPaid());
+    	    payment.setPaymentDate(paymentDto.getPaymentDate());
+    	    payment.setPaymentStatus(paymentDto.getPaymentStatus());
+
+    	    Booking booking = bookingRepository.findById(paymentDto.getBookingId())
+    	        .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+    	    payment.setBooking(booking);
+
         log.info("Processing payment for booking ID: {}", payment.getBooking().getBookingId());
 
         return paymentRepository.save(payment);

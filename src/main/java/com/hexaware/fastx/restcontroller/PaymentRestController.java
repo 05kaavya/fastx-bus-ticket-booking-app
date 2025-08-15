@@ -24,7 +24,7 @@ public class PaymentRestController {
     @PostMapping("/process")
     public Payment processPayment(@RequestBody PaymentDto dto) {
     	 log.info("Processing payment for booking ID: {}", dto.getBookingId());
-         return service.processPayment(dto.toEntity());
+         return service.processPayment(dto);
      }
 
     @GetMapping("/booking/{bookingId}")

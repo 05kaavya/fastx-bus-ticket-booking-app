@@ -11,6 +11,23 @@ import com.hexaware.fastx.repository.BusRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Service implementation for managing Bus entities in the system.
+ *
+ * Responsibilities:
+ * - Add new buses
+ * - Retrieve buses by ID or name
+ * - Update existing buses
+ * - Fetch all buses
+ * - Delete buses by their ID
+ *
+ * Utilizes BusRepository for persistence operations.
+ * Throws ResourceNotFoundException when a requested bus is not found.
+ *
+ * Logging (via Lombok's @Slf4j) is used to track key operations 
+ * for debugging and auditing purposes.
+ */
+
 @Slf4j
 @Service
 public class BusServiceImpl implements IBusService {
