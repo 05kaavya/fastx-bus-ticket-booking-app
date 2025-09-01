@@ -8,6 +8,7 @@ import com.hexaware.fastx.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -73,4 +74,11 @@ public class UserRestController {
     	log.info("Counting total users");
         return service.countTotalUsers();
     }
+    
+    @GetMapping("/me")
+    public User getCurrentUser(@AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails) {
+        log.info("Fetching logged-in user details for: {}", userDetails.getUsername());
+        return service.getUserByEmail(userDetails.getUsername()); // assuming username = email in JWT
+    }
+
 }

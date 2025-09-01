@@ -106,4 +106,10 @@ public class BookingServiceImpl implements IBookingService {
        
         return "Booking deleted successfully " ;
     }
+    
+    @Override
+    public List<Booking> getBookingsByUserEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        return bookingRepository.findByUser(user);
+    }
 }

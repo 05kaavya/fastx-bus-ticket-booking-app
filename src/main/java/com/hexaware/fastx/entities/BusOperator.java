@@ -35,11 +35,11 @@ public class BusOperator {
     private String operatorName;
     private String email;
     private String password;
-    private String contactNumber;
-
-   
+    private String contactNumber;   
     private String address;
 
+    private String role="OPERATOR";
+    
     @CreationTimestamp
     @Column(updatable = false)
     private Timestamp createdAt;

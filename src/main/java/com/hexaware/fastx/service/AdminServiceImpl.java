@@ -3,6 +3,7 @@ package com.hexaware.fastx.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.fastx.entities.Admin;
@@ -39,6 +40,9 @@ public class AdminServiceImpl implements IAdminService {
 	@Autowired
 	AdminRepository adminRepository;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public Admin getAdminById(int adminId) {
 		
@@ -53,6 +57,8 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Override
 	public Admin addAdmin(Admin admin) {
+		admin.setPassword(passwordEncoder.encode(admin.getPassword())); // hash password
+		 ;
 		log.info("Adding new admin: {}", admin.getEmail());
 		if (adminRepository.findByName(admin.getName()) != null) {
 	        throw new DuplicateResourceException("Admin already exists with name: " + admin.getName());

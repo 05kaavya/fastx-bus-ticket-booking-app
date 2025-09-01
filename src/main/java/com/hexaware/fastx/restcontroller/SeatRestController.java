@@ -1,7 +1,7 @@
 package com.hexaware.fastx.restcontroller;
 
 import com.hexaware.fastx.dto.SeatDto;
-import com.hexaware.fastx.entities.Seat;
+//import com.hexaware.fastx.entities.Seat;
 import com.hexaware.fastx.service.ISeatService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,21 +20,24 @@ public class SeatRestController {
     private ISeatService service;
 
     @PostMapping("/add")
-    public Seat addSeat(@RequestBody SeatDto dto) {
+    public SeatDto addSeat(@RequestBody SeatDto dto) {
     	 log.info("Adding seat: {}", dto.getSeatNumber());
-         return service.addSeat(dto.toEntity());
+         return SeatDto.fromEntity(service.addSeat(dto));
      }
 
     @PutMapping("/update")
-    public Seat updateSeat(@RequestBody SeatDto dto) {
+    public SeatDto updateSeat(@RequestBody SeatDto dto) {
     	 log.info("Updating seat ID: {}", dto.getSeatId());
-         return service.updateSeat(dto.toEntity());
+    	 return SeatDto.fromEntity(service.updateSeat(dto));
      }
 
     @GetMapping("/bus/{busId}")
-    public List<Seat> getSeatsByBusId(@PathVariable int busId) {
+    public List<SeatDto> getSeatsByBusId(@PathVariable int busId) {
     	log.info("Fetching seats for bus ID: {}", busId);
-        return service.getSeatsByBusId(busId);
+    	 return service.getSeatsByBusId(busId)
+                 .stream()
+                 .map(SeatDto::fromEntity)
+                 .toList();
     }
 
     @DeleteMapping("/delete/{seatId}")
@@ -44,27 +47,38 @@ public class SeatRestController {
     }
 
     @GetMapping("/bus/{busId}/status/{seatStatus}")
-    public List<Seat> getSeatsByBusIdAndSeatStatus(@PathVariable int busId, @PathVariable String seatStatus) {
+    public List<SeatDto> getSeatsByBusIdAndSeatStatus(@PathVariable int busId, @PathVariable String seatStatus) {
     	log.info("Fetching seats for bus ID: {} with status: {}", busId, seatStatus);
-        return service.getSeatsByBusIdAndSeatStatus(busId, seatStatus);
-    }
+    	 return service.getSeatsByBusIdAndSeatStatus(busId, seatStatus)
+                 .stream()
+                 .map(SeatDto::fromEntity)
+                 .toList();    }
 
     @GetMapping("/bus/{busId}/type/{seatType}")
-    public List<Seat> getSeatsByBusIdAndSeatType(@PathVariable int busId, @PathVariable String seatType) {
+    public List<SeatDto> getSeatsByBusIdAndSeatType(@PathVariable int busId, @PathVariable String seatType) {
         log.info("Fetching seats for bus ID: {} with type: {}", busId, seatType);
-        return service.getSeatsByBusIdAndSeatType(busId, seatType);
+        return service.getSeatsByBusIdAndSeatType(busId, seatType)
+                .stream()
+                .map(SeatDto::fromEntity)
+                .toList();
     }
 
     @GetMapping("/status/{seatStatus}")
-    public List<Seat> getSeatsBySeatStatus(@PathVariable String seatStatus) {
+    public List<SeatDto> getSeatsBySeatStatus(@PathVariable String seatStatus) {
     	 log.info("Fetching seats with status: {}", seatStatus);
-        return service.getSeatsBySeatStatus(seatStatus);
+    	 return service.getSeatsBySeatStatus(seatStatus)
+                 .stream()
+                 .map(SeatDto::fromEntity)
+                 .toList();
     }
 
     @GetMapping("/type/{seatType}")
-    public List<Seat> getSeatsBySeatType(@PathVariable String seatType) {
+    public List<SeatDto> getSeatsBySeatType(@PathVariable String seatType) {
     	log.info("Fetching seats with type: {}", seatType);
-        return service.getSeatsBySeatType(seatType);
+    	 return service.getSeatsBySeatType(seatType)
+                 .stream()
+                 .map(SeatDto::fromEntity)
+                 .toList();
     }
 }
 

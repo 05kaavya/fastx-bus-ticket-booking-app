@@ -36,6 +36,8 @@ public class User {
     private String gender;
     private String contactNumber;
     private String address;
+    private String role;
+   // private String role = "USER";
     
     @CreationTimestamp
     @Column(updatable = false)

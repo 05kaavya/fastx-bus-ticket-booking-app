@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hexaware.fastx.entities.Bus;
 import com.hexaware.fastx.entities.Route;
 import com.hexaware.fastx.exception.ResourceNotFoundException;
 import com.hexaware.fastx.repository.RouteRepository;
@@ -34,10 +35,19 @@ public class RouteServiceImpl implements IRouteService {
     @Autowired
     RouteRepository routeRepository;
 
+    @Autowired
+    IBusService busService;
+    
     @Override
     public Route addRoute(Route route) {
         log.info("Adding new route: {} to {}", route.getOrigin(), route.getDestination());
 
+        if (route.getBus() != null && route.getBus().getBusId() > 0) {
+            Bus bus = busService.getBusById(route.getBus().getBusId());
+            route.setBus(bus);
+        } else {
+            throw new ResourceNotFoundException("Bus ID is missing or invalid while adding route");
+        }
         return routeRepository.save(route);
     }
 

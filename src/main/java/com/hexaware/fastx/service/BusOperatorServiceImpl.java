@@ -44,6 +44,8 @@ public class BusOperatorServiceImpl implements IBusOperatorService {
     public BusOperator getOperatorById(int operatorId) {
     	 log.info("Fetching bus operator by ID: {}", operatorId);
         return busOperatorRepository.findById(operatorId) .orElseThrow(() -> new ResourceNotFoundException("Bus operator not found with ID: " + operatorId));
+        
+
     }
 
     @Override

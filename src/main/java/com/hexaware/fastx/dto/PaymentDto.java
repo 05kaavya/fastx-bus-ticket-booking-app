@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+
+import com.hexaware.fastx.entities.Booking;
 import com.hexaware.fastx.entities.Payment;
 
 @Data
@@ -30,12 +32,15 @@ public class PaymentDto {
     private String paymentStatus;
 
 	
-	  public Payment toEntity() { 
-		  Payment payment = new Payment();
-	  payment.setPaymentId(this.paymentId); 
-	  payment.setAmountPaid(this.amountPaid);
-	  payment.setPaymentDate(this.paymentDate);
-	  payment.setPaymentStatus(this.paymentStatus); 
-	  return payment; }
+    public Payment toEntity(Booking booking) {
+        Payment payment = new Payment();
+        payment.setPaymentId(this.paymentId);
+        payment.setAmountPaid(this.amountPaid);
+        payment.setPaymentDate(this.paymentDate);
+        payment.setPaymentStatus(this.paymentStatus);
+        payment.setBooking(booking);
+        return payment;
+    }
+
 	 
 }

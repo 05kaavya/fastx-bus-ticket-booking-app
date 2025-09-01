@@ -9,9 +9,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hexaware.fastx.exception.*;
-
+import com.hexaware.fastx.entities.Booking;
 import com.hexaware.fastx.entities.Cancellation;
+import com.hexaware.fastx.entities.Payment;
+import com.hexaware.fastx.repository.BookingRepository;
 import com.hexaware.fastx.repository.CancellationRepository;
+import com.hexaware.fastx.repository.PaymentRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,16 +37,48 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class CancellationServiceImpl implements ICancellationService {
+  
+  @Autowired 
+  CancellationRepository cancellationRepository;
+  
+  @Autowired 
+  BookingRepository bookingRepository;
+  
+  @Autowired 
+  PaymentRepository paymentRepository;
+  
+  
+  @Override
+  public Cancellation cancelBooking(Cancellation cancellation) {
+      int bookingId = cancellation.getBooking().getBookingId();
+      int paymentId = cancellation.getPayment().getPaymentId();
 
-    @Autowired
-    CancellationRepository cancellationRepository;
+      log.info("Cancelling booking ID: {} with payment ID: {}", bookingId, paymentId);
 
-    @Override
-    public Cancellation cancelBooking(Cancellation cancellation) {
-    	
-    	log.info("Cancelling booking ID: {}", cancellation.getBooking().getBookingId());
-        return cancellationRepository.save(cancellation);
-    }
+      // Fetch booking
+      Booking booking = bookingRepository.findById(bookingId)
+          .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID: " + bookingId));
+
+      // Fetch payment
+      Payment payment = paymentRepository.findById(paymentId)
+          .orElseThrow(() -> new ResourceNotFoundException("Payment not found with ID: " + paymentId));
+
+      // Attach managed entities
+      cancellation.setBooking(booking);
+      cancellation.setPayment(payment);
+
+      return cancellationRepository.save(cancellation);
+  }
+
+  
+	/*
+	 * @Override public Cancellation cancelBooking(Cancellation cancellation) {
+	 * 
+	 * log.info("Cancelling booking ID: {}",
+	 * cancellation.getBooking().getBookingId()); return
+	 * cancellationRepository.save(cancellation); }
+	 */
+ 
 
     @Override
     public Cancellation getCancellationByBookingId(int bookingId) {

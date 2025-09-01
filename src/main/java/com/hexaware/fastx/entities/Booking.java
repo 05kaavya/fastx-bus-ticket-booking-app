@@ -36,15 +36,6 @@ public class Booking {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	 private int bookingId;
 	
-	 private String seatNumber;
-	 private String passengerName;
-	 private Gender passengerGender;
-	 
-	 public enum Gender {
-	        Male, Female, Other
-	    }
-	 
-	 private String seatType;
 	 private Timestamp bookingDate;
 	 private BigDecimal totalAmount;
 	 

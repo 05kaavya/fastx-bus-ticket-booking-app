@@ -32,6 +32,8 @@ public class AdminDto {
     @NotBlank(message = "Name cannot be blank")
     @Pattern(regexp = "^[A-Za-z ]+$", message = "Name must contain only letters and spaces")
     private String name;
+    
+   private String role="ADMIN";
 
 	
 
@@ -41,7 +43,8 @@ public class AdminDto {
 	  admin.setAdminId(this.adminId); 
 	  admin.setEmail(this.email);
 	  admin.setPassword(this.password); 
-	  admin.setName(this.name); 
+	  admin.setName(this.name);
+	  //admin.setRole(this.role);
 	  return admin; 
 	  }
 	 

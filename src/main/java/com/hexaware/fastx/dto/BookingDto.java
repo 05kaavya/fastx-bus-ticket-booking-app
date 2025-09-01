@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import com.hexaware.fastx.entities.Booking;
-import com.hexaware.fastx.entities.Booking.Gender;
 import com.hexaware.fastx.entities.Route;
 import com.hexaware.fastx.entities.User;
 
@@ -28,15 +27,7 @@ public class BookingDto {
     @Min(value = 1, message = "Route ID must be greater than 0")
     private int routeId;
     
-    @NotBlank(message="Seat No cannot be null")
-	@Pattern(regexp = "^[A-Z][0-9]{1,2}$")
-	private String seatNumber;
 	
-	@NotBlank(message="Name is required")
-	private String passengerName;
-	
-	@Pattern(regexp = "^(Window|Normal)$", message = "Seats Available : Window or normal")
-    private String seatType;
 	
     @NotNull(message = "Booking date cannot be null")
     @Future(message="Date should only be in future")
@@ -49,17 +40,12 @@ public class BookingDto {
     @Pattern(regexp = "^(Confirmed|Cancelled|Pending)$", message = "Status must be Confirmed, Cancelled, or Pending")
     private String status;
 
-	private Gender passengerGender;
 
 	
     public Booking toEntity() {
         Booking booking = new Booking();
         booking.setBookingId(this.bookingId);
-        booking.setSeatNumber(this.seatNumber);
-        booking.setPassengerName(this.passengerName);
-        booking.setPassengerGender(this.passengerGender);
         booking.setBookingDate(this.bookingDate);
-        booking.setSeatType(this.seatType);
         booking.setTotalAmount(this.totalAmount);
         booking.setStatus(this.status);
 

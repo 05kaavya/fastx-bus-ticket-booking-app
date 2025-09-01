@@ -34,6 +34,8 @@ public class UserDto {
     private String contactNumber;
 
     private String address;
+    private String role;
+    //private String role = "USER";
 
 	
     public User toEntity() {
@@ -47,6 +49,7 @@ public class UserDto {
         user.setGender(this.gender);
         user.setContactNumber(this.contactNumber);
         user.setAddress(this.address);
+        user.setRole(this.role);
         user.setBookings(new ArrayList<>());
         return user;
     }

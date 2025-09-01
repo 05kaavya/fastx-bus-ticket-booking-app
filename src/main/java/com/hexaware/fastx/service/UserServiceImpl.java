@@ -138,4 +138,9 @@ public class UserServiceImpl implements IUserService {
     	log.info("Counting total registered users");
         return userRepository.count();
     }
+
+	@Override
+	public User getUserByEmail(String email) {
+		 return userRepository.findByEmail(email).orElse(null);
+	}
 }

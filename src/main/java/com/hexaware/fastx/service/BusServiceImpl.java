@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hexaware.fastx.entities.Bus;
+import com.hexaware.fastx.entities.BusOperator;
 import com.hexaware.fastx.exception.ResourceNotFoundException;
 import com.hexaware.fastx.repository.BusRepository;
 
@@ -34,10 +35,20 @@ public class BusServiceImpl implements IBusService {
 
     @Autowired
     BusRepository busRepository;
+    
+    @Autowired
+    IBusOperatorService busOperatorService;
 
     @Override
     public Bus addBus(Bus bus) {
         log.info("Adding bus: {}", bus.getBusName());
+        
+        if (bus.getOperator() != null && bus.getOperator().getOperatorId() > 0) {
+            BusOperator operator = busOperatorService.getOperatorById(bus.getOperator().getOperatorId());
+            bus.setOperator(operator);
+        } else {
+            throw new ResourceNotFoundException("Operator ID is missing or invalid while adding bus");
+        }
         return busRepository.save(bus);
     }
 
@@ -64,6 +75,10 @@ public class BusServiceImpl implements IBusService {
 
     	if (!busRepository.existsById(bus.getBusId())) {
             throw new ResourceNotFoundException("Bus not found with ID: " + bus.getBusId());
+        }
+    	if (bus.getOperator() != null && bus.getOperator().getOperatorId() > 0) {
+            BusOperator operator = busOperatorService.getOperatorById(bus.getOperator().getOperatorId());
+            bus.setOperator(operator);
         }
         return busRepository.save(bus);
     }

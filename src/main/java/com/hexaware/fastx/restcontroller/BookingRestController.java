@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,5 +50,13 @@ public class BookingRestController {
     	log.info("Deleting booking ID: {}", bookingId);
         return service.deleteByBookingId(bookingId);
     }
+    
+    @GetMapping("/my")
+    public List<Booking> getMyBookings(@AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails) {
+        log.info("Fetching bookings for logged-in user: {}", userDetails.getUsername());
+        return service.getBookingsByUserEmail(userDetails.getUsername()); // implement this in service
+    }
+
+
 }
 

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hexaware.fastx.dto.SeatDto;
+import com.hexaware.fastx.entities.Bus;
 import com.hexaware.fastx.entities.Seat;
 import com.hexaware.fastx.exception.ResourceNotFoundException;
 import com.hexaware.fastx.repository.SeatRepository;
@@ -33,19 +35,46 @@ public class SeatServiceImpl implements ISeatService {
 
     @Autowired
     SeatRepository seatRepository;
+    
+    @Autowired
+    IBusService busService;
 
     @Override
-    public Seat addSeat(Seat seat) {
-    	 log.info("Adding seat: {}", seat.getSeatNumber());
+    public Seat addSeat(SeatDto dto) {
+    	 log.info("Adding seat: {}", dto.getSeatNumber());
+    	    Bus bus = busService.getBusById(dto.getBusId());
+    	    Seat seat = dto.toEntity(bus);
+    	 
+			/*
+			 * if (seat.getBus() != null && seat.getBus().getBusId() > 0) { Bus bus =
+			 * busService.getBusById(seat.getBus().getBusId()); seat.setBus(bus); } else {
+			 * throw new
+			 * ResourceNotFoundException("Bus ID missing or invalid while adding seat"); }
+			 */
+    	 
         return seatRepository.save(seat);
     }
 
     @Override
-    public Seat updateSeat(Seat seat) {
-    	log.info("Updating seat ID: {}", seat.getSeatId());
-    	 if (!seatRepository.existsById(seat.getSeatId())) {
-             throw new ResourceNotFoundException("Seat not found with ID: " + seat.getSeatId());
-         }
+    public Seat updateSeat(SeatDto dto) {
+    	log.info("Updating seat ID: {}", dto.getSeatId());
+    	
+    	if (!seatRepository.existsById(dto.getSeatId())) {
+            throw new ResourceNotFoundException("Seat not found with ID: " + dto.getSeatId());
+        }
+
+        Bus bus = busService.getBusById(dto.getBusId());
+        Seat seat = dto.toEntity(bus);
+		/*
+		 * if (!seatRepository.existsById(seat.getSeatId())) { throw new
+		 * ResourceNotFoundException("Seat not found with ID: " + seat.getSeatId()); }
+		 * 
+		 * if (seat.getBus() != null && seat.getBus().getBusId() > 0) { Bus bus =
+		 * busService.getBusById(seat.getBus().getBusId()); seat.setBus(bus); } else {
+		 * throw new
+		 * ResourceNotFoundException("Bus ID missing or invalid while updating seat"); }
+		 * return
+		 */ 
         return seatRepository.save(seat);
     }
 

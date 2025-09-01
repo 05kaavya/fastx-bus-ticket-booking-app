@@ -19,5 +19,7 @@ import com.hexaware.fastx.entities.User;
 		public boolean isUserExists(String email);
 		public List<Booking> getAllBookingsByUserId(int userId);
 		public long countTotalUsers();
+		public User getUserByEmail(String email);
+
 	}
 	

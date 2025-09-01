@@ -31,6 +31,8 @@ public class BusOperatorDto {
     private String contactNumber;
 
     private String address;
+    
+    private String role ="OPERATOR";
 
 	
 	  public BusOperator toEntity() {
@@ -39,7 +41,8 @@ public class BusOperatorDto {
 	  operator.setOperatorName(this.operatorName);
 	  operator.setEmail(this.email); 
 	  operator.setContactNumber(this.contactNumber);
-	  operator.setAddress(this.address); 
+	  operator.setAddress(this.address);
+	  operator.setRole(this.role);
 	  return operator; }
 	 
 }

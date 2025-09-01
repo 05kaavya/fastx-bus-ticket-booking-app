@@ -15,7 +15,7 @@ public class AdminRestController {
     @Autowired
     private IAdminService service;
 
-    @PostMapping("/add")
+    @PostMapping("/register")
     public Admin addAdmin(@RequestBody AdminDto dto) {
         return service.addAdmin(dto.toEntity());
     }
