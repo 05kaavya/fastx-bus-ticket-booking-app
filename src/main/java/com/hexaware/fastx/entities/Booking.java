@@ -2,14 +2,13 @@ package com.hexaware.fastx.entities;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-//import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-//import jakarta.persistence.CascadeType;
-//import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -23,42 +22,43 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name="bookings")
+@Table(name = "bookings")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "bookingId")
 public class Booking {
-	
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	 private int bookingId;
-	
-	 private Timestamp bookingDate;
-	 private BigDecimal totalAmount;
-	 
-	 
-	 private String status;
-	 
-	    @ManyToOne(fetch = FetchType.LAZY)
-	    @JoinColumn(name = "user_id")
-	    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	    private User user;
 
-	    @ManyToOne(fetch = FetchType.LAZY)
-	    @JoinColumn(name = "route_id")
-	    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	    private Route route;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int bookingId;
 
-	    // Payment/Cancellation own the FK to Booking
-	    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
-	    private Payment payment;
+    private Timestamp bookingDate;
+    private BigDecimal totalAmount;
+    private String status;
 
-	    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
-	    private Cancellation cancellation;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private User user;
 
-	    @OneToMany(mappedBy = "booking", fetch = FetchType.LAZY)
-	    private List<BookingSeat> bookingSeats;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "route_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Route route;
+
+    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Payment payment;
+
+    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Cancellation cancellation;
+
+    @OneToMany(mappedBy = "booking", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private List<BookingSeat> bookingSeats;
+
 }
+

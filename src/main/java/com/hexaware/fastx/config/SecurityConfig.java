@@ -40,19 +40,50 @@ public class SecurityConfig {
                 		// Public endpoints
                         .requestMatchers("/auth/**", "/api/users/register", "/api/admins/register",
                                          "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        
+                     // USER endpoints (also allow ADMIN to access these)
+                        .requestMatchers("/api/users/me").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/buses/getall", "/api/buses/get/**", "/api/buses/name/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/routes/getall", "/api/routes/get/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/bookings/add", "/api/bookings/update", "/api/bookings/delete/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/payments/**", "/api/cancellations/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/seats/bus/**").hasAnyAuthority("USER", "ADMIN")
 
-                        // 👉 USER can view buses & routes
-                        .requestMatchers(HttpMethod.GET, "/api/buses/**", "/api/routes/**").hasAuthority("USER")
-
-                        // 👉 ADMIN can manage buses, routes, operators, seats
-                        .requestMatchers("/api/buses/**", "/api/routes/**", "/api/bus-operators/**", "/api/seats/**")
-                        .hasAuthority("ADMIN")
-
-                        // 👉 USER can create bookings/payments/cancellations
-                        .requestMatchers("/api/bookings/**", "/api/payments/**", "/api/cancellations/**").hasAuthority("USER")
-
-                        // 👉 ADMIN can view/manage all bookings
-                        .requestMatchers("/api/admins/**", "/api/bookings/**").hasAuthority("ADMIN")
+                        // ADMIN-only endpoints
+                        .requestMatchers("/api/admins/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/buses/add", "/api/buses/update", "/api/buses/delete/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/routes/add", "/api/routes/delete/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/bus-operators/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/seats/add", "/api/seats/update", "/api/seats/delete/**","/api/seats/bus/{busId}").hasAuthority("ADMIN")
+                        
+						/*
+						 * // USER endpoints .requestMatchers("/api/users/me").hasAuthority("USER")
+						 * .requestMatchers("/api/buses/getall", "/api/buses/get/**",
+						 * "/api/buses/name/**").hasAuthority("USER")
+						 * .requestMatchers("/api/routes/getall",
+						 * "/api/routes/get/**").hasAuthority("USER")
+						 * .requestMatchers("/api/bookings/add", "/api/bookings/update",
+						 * "/api/bookings/delete/**").hasAuthority("USER")
+						 * .requestMatchers("/api/payments/**",
+						 * "/api/cancellations/**").hasAuthority("USER")
+						 * .requestMatchers("/api/seats/bus/**").hasAuthority("USER")
+						 * 
+						 * // ADMIN management endpoints
+						 * .requestMatchers("/api/admins/**").hasAuthority("ADMIN")
+						 * .requestMatchers("/api/buses/add", "/api/buses/update",
+						 * "/api/buses/delete/**").hasAuthority("ADMIN")
+						 * .requestMatchers("/api/routes/add",
+						 * "/api/routes/delete/**").hasAuthority("ADMIN")
+						 * .requestMatchers("/api/bus-operators/**").hasAuthority("ADMIN")
+						 * .requestMatchers("/api/seats/add", "/api/seats/update",
+						 * "/api/seats/delete/**").hasAuthority("ADMIN")
+						 * 
+						 * // ADMIN getall endpoints (view everything) .requestMatchers(
+						 * "/api/buses/getall", "/api/routes/getall", "/api/seats/getall",
+						 * "/api/bookings/getall", "/api/users/getall", "/api/payments/getall",
+						 * "/api/cancellations/getall", "/api/bus-operators/getall",
+						 * "/api/bookingseat/getall" ).hasAuthority("ADMIN")
+						 */
                         
                         // All other requests require authentication
                         .anyRequest().authenticated()

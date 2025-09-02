@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,11 +52,22 @@ public class BookingRestController {
         return service.deleteByBookingId(bookingId);
     }
     
+ // ✅ Return bookings for the logged-in user
     @GetMapping("/my")
-    public List<Booking> getMyBookings(@AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails) {
-        log.info("Fetching bookings for logged-in user: {}", userDetails.getUsername());
-        return service.getBookingsByUserEmail(userDetails.getUsername()); // implement this in service
+    public List<Booking> getMyBookings(Authentication authentication) {
+        String email = authentication.getName(); 
+        return service.findBookingsByUserEmail(email);
     }
+    
+	/*
+	 * @GetMapping("/my") public List<Booking>
+	 * getMyBookings(@AuthenticationPrincipal
+	 * org.springframework.security.core.userdetails.User userDetails) {
+	 * log.info("Fetching bookings for logged-in user: {}",
+	 * userDetails.getUsername()); return
+	 * service.getBookingsByUserEmail(userDetails.getUsername()); // implement this
+	 * in service }
+	 */
 
 
 }

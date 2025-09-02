@@ -108,8 +108,12 @@ public class BookingServiceImpl implements IBookingService {
     }
     
     @Override
-    public List<Booking> getBookingsByUserEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        return bookingRepository.findByUser(user);
+    public List<Booking> findBookingsByUserEmail(String email) {
+        return bookingRepository.findByUserEmail(email);
     }
+	/*
+	 * @Override public List<Booking> getBookingsByUserEmail(String email) { User
+	 * user = userRepository.findByEmail(email).orElseThrow(); return
+	 * bookingRepository.findByUser(user); }
+	 */
 }
