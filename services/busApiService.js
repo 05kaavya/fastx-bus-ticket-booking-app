@@ -21,8 +21,8 @@ api.interceptors.request.use(
   }
 );
 
-// Bus service
-export const busService = {
+// Bus API service
+export const busApiService = {
   // Get all buses
   getAllBuses: async () => {
     try {
@@ -83,8 +83,8 @@ export const busService = {
   }
 };
 
-// Route service
-export const routeService = {
+// Route API service
+export const routeApiService = {
   // Get all routes
   getAllRoutes: async () => {
     try {
@@ -108,8 +108,8 @@ export const routeService = {
   }
 };
 
-// Seat service
-export const seatService = {
+// Seat API service
+export const seatApiService = {
   // Get seats by bus ID
   getSeatsByBusId: async (busId) => {
     try {

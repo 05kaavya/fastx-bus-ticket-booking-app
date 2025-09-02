@@ -18,8 +18,8 @@ export default function AppNavbar() {
       setUsername(localStorage.getItem("username"));
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const handleLogout = () => {
@@ -36,9 +36,9 @@ export default function AppNavbar() {
         <Navbar.Brand as={Link} to="/" className="brand">
           <i className="fas fa-bus me-2"></i>FastX
         </Navbar.Brand>
-        
+
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        
+
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             {!token && (
@@ -57,6 +57,9 @@ export default function AppNavbar() {
 
             {role === "USER" && (
               <>
+                <Nav.Link as={Link} to="/dashboard" className="nav-link-custom">
+                  <i className="fas fa-home me-1"></i>User Dashboard
+                </Nav.Link>
                 <Nav.Link as={Link} to="/buses" className="nav-link-custom">
                   <i className="fas fa-bus me-1"></i>Buses
                 </Nav.Link>
@@ -65,37 +68,48 @@ export default function AppNavbar() {
                 </Nav.Link>
               </>
             )}
-            
+
             {role === "ADMIN" && (
-              <Nav.Link as={Link} to="/admin/dashboard" className="nav-link-custom">
-                <i className="fas fa-tachometer-alt me-1"></i>Admin Dashboard
-              </Nav.Link>
+              <>
+                <Nav.Link as={Link} to="/admin/dashboard" className="nav-link-custom">
+                  <i className="fas fa-tachometer-alt me-1"></i>Admin Dashboard
+                </Nav.Link>
+              </>
             )}
           </Nav>
-          
+
           {token && (
             <Nav className="ms-auto">
               <Dropdown align="end">
-                <Dropdown.Toggle variant="outline-light" id="dropdown-user" className="user-dropdown">
+                <Dropdown.Toggle
+                  variant="outline-light"
+                  id="dropdown-user"
+                  className="user-dropdown"
+                >
                   <i className="fas fa-user-circle me-1"></i>
                   {username || "User"}
-                  <Badge bg={role === "ADMIN" ? "warning" : "info"} className="ms-2">
+                  <Badge
+                    bg={role === "ADMIN" ? "warning" : "info"}
+                    className="ms-2"
+                  >
                     {role}
                   </Badge>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu className="dropdown-menu-custom">
                   <Dropdown.Header>
-                    <i className="fas fa-user me-1"></i> 
+                    <i className="fas fa-user me-1"></i>
                     {username || "User"}
                     <div>
                       <small className="text-muted">{role} Account</small>
                     </div>
                   </Dropdown.Header>
-                 
-                  
+
                   <Dropdown.Divider />
-                  <Dropdown.Item onClick={handleLogout} className="logout-item">
+                  <Dropdown.Item
+                    onClick={handleLogout}
+                    className="logout-item"
+                  >
                     <i className="fas fa-sign-out-alt me-2"></i>Logout
                   </Dropdown.Item>
                 </Dropdown.Menu>
@@ -107,6 +121,7 @@ export default function AppNavbar() {
     </Navbar>
   );
 }
+
 
 // // AppNavbar.js
 // import { Link, useNavigate } from "react-router-dom";

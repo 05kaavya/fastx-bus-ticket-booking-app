@@ -1,37 +1,26 @@
-// Home.js
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
-
+import img1 from '../assets/img1.jpg';
+   // ✅ import image
 
 const Home = () => {
-  const [searchData, setSearchData] = useState({
-    from: '',
-    to: '',
-    date: ''
-  });
-
   const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSearchData({
-      ...searchData,
-      [name]: value
-    });
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log('Search data:', searchData);
-
-    // Navigate to buses page with query params
-    navigate(`/buses?from=${searchData.from}&to=${searchData.to}&date=${searchData.date}`);
+  const handleSearchClick = () => {
+    // Navigate directly to the bus search page
+    navigate('/buses/search');
   };
 
   return (
-    <div className="home-container">
+    <div 
+      className="home-container"
+      style={{
+        background: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url(${img1}) no-repeat center center fixed`,
+        backgroundSize: "cover"
+      }}
+    >
       {/* Hero Section */}
       <div className="hero-section">
         <div className="container">
@@ -40,63 +29,19 @@ const Home = () => {
               <h1 className="display-4 fw-bold mb-4">Book Your Bus Journey</h1>
               <p className="lead mb-5">Travel across the country with comfort and ease</p>
 
-              {/* Booking Form */}
+              {/* Simple Search Button */}
               <div className="booking-card card shadow">
                 <div className="card-body p-4">
                   <h3 className="card-title text-center mb-4">Find Your Bus</h3>
-                  <form onSubmit={handleSearch}>
-                    <div className="row g-3">
-                      <div className="col-md-4">
-                        <div className="form-floating">
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="from"
-                            name="from"
-                            placeholder="Enter origin"
-                            value={searchData.from}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <label htmlFor="from">From</label>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-floating">
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="to"
-                            name="to"
-                            placeholder="Enter destination"
-                            value={searchData.to}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <label htmlFor="to">To</label>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-floating">
-                          <input
-                            type="date"
-                            className="form-control"
-                            id="date"
-                            name="date"
-                            value={searchData.date}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <label htmlFor="date">Travel Date</label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-center mt-4">
-                      <button type="submit" className="btn btn-primary btn-lg">
-                        <i className="fas fa-search me-2"></i>Search Buses
-                      </button>
-                    </div>
-                  </form>
+                  <div className="text-center">
+                    <button 
+                      type="button" 
+                      className="btn btn-primary btn-lg px-5"
+                      onClick={handleSearchClick}
+                    >
+                      <i className="fas fa-search me-2"></i>Search Buses
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -150,9 +95,8 @@ const Home = () => {
 export default Home;
 
 
-
-// // Home.js
 // import React, { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import './Home.css';
 
@@ -162,6 +106,8 @@ export default Home;
 //     to: '',
 //     date: ''
 //   });
+
+//   const navigate = useNavigate();
 
 //   const handleInputChange = (e) => {
 //     const { name, value } = e.target;
@@ -174,36 +120,19 @@ export default Home;
 //   const handleSearch = (e) => {
 //     e.preventDefault();
 //     console.log('Search data:', searchData);
-//     // Here you would typically handle the search logic
+
+//     // Navigate to bus search page with state data
+//     navigate('/buses/search', { 
+//       state: {
+//         origin: searchData.from,
+//         destination: searchData.to,
+//         date: searchData.date
+//       }
+//     });
 //   };
 
 //   return (
 //     <div className="home-container">
-//       {/* Navigation Bar */}
-//       <nav className="navbar navbar-expand-lg navbar-dark">
-//         <div className="container">
-//           {/* <a className="navbar-brand" href="./Home.js">
-//             <i className="fas fa-bus me-2"></i>SwiftBus
-//           </a> */}
-//           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-//             <span className="navbar-toggler-icon"></span>
-//           </button>
-//           <div className="collapse navbar-collapse" id="navbarNav">
-//             <ul className="navbar-nav ms-auto">
-//               <li className="nav-item">
-//                 <a className="nav-link" href="./Login.js"><i className="fas fa-user me-1"></i> User Login</a>
-//               </li>
-//               <li className="nav-item">
-//                 <a className="nav-link" href="./AdminLogin.js"><i className="fas fa-user-cog me-1"></i> Admin Login</a>
-//               </li>
-//               <li className="nav-item">
-//                 <a className="nav-link" href="./Register.js"><i className="fas fa-user-plus me-1"></i> Register</a>
-//               </li>
-//             </ul>
-//           </div>
-//         </div>
-//       </nav>
-
 //       {/* Hero Section */}
 //       <div className="hero-section">
 //         <div className="container">
@@ -211,7 +140,7 @@ export default Home;
 //             <div className="col-lg-8 text-center">
 //               <h1 className="display-4 fw-bold mb-4">Book Your Bus Journey</h1>
 //               <p className="lead mb-5">Travel across the country with comfort and ease</p>
-              
+
 //               {/* Booking Form */}
 //               <div className="booking-card card shadow">
 //                 <div className="card-body p-4">
@@ -220,50 +149,40 @@ export default Home;
 //                     <div className="row g-3">
 //                       <div className="col-md-4">
 //                         <div className="form-floating">
-//                           <select 
-//                             className="form-select" 
-//                             id="from" 
+//                           <input
+//                             type="text"
+//                             className="form-control"
+//                             id="from"
 //                             name="from"
+//                             placeholder="Enter origin"
 //                             value={searchData.from}
 //                             onChange={handleInputChange}
 //                             required
-//                           >
-//                             <option value="">Select origin</option>
-//                             <option value="new-york">New York</option>
-//                             <option value="los-angeles">Los Angeles</option>
-//                             <option value="chicago">Chicago</option>
-//                             <option value="houston">Houston</option>
-//                             <option value="miami">Miami</option>
-//                           </select>
+//                           />
 //                           <label htmlFor="from">From</label>
 //                         </div>
 //                       </div>
 //                       <div className="col-md-4">
 //                         <div className="form-floating">
-//                           <select 
-//                             className="form-select" 
-//                             id="to" 
+//                           <input
+//                             type="text"
+//                             className="form-control"
+//                             id="to"
 //                             name="to"
+//                             placeholder="Enter destination"
 //                             value={searchData.to}
 //                             onChange={handleInputChange}
 //                             required
-//                           >
-//                             <option value="">Select destination</option>
-//                             <option value="new-york">New York</option>
-//                             <option value="los-angeles">Los Angeles</option>
-//                             <option value="chicago">Chicago</option>
-//                             <option value="houston">Houston</option>
-//                             <option value="miami">Miami</option>
-//                           </select>
+//                           />
 //                           <label htmlFor="to">To</label>
 //                         </div>
 //                       </div>
 //                       <div className="col-md-4">
 //                         <div className="form-floating">
-//                           <input 
-//                             type="date" 
-//                             className="form-control" 
-//                             id="date" 
+//                           <input
+//                             type="date"
+//                             className="form-control"
+//                             id="date"
 //                             name="date"
 //                             value={searchData.date}
 //                             onChange={handleInputChange}
@@ -320,13 +239,8 @@ export default Home;
 //         <div className="container">
 //           <div className="row">
 //             <div className="col-md-6">
-//               <p>&copy; 2023 SwiftBus. All rights reserved.</p>
+//               <p>&copy; 2025 FastX. All rights reserved.</p>
 //             </div>
-//             {/* <div className="col-md-6 text-md-end">
-//               <a href="#" className="text-light me-3">Terms of Service</a>
-//               <a href="#" className="text-light me-3">Privacy Policy</a>
-//               <a href="#" className="text-light">Contact Us</a>
-//             </div> */}
 //           </div>
 //         </div>
 //       </footer>
@@ -335,3 +249,4 @@ export default Home;
 // };
 
 // export default Home;
+

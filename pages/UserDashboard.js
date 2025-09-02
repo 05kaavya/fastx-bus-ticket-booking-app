@@ -1,6 +1,6 @@
 // src/pages/UserDashboard.js
 import React, { useEffect, useState } from "react";
-import { Card, Button, Row, Col, Container, Spinner } from "react-bootstrap";
+import { Card, Button, Row, Col, Container, Spinner, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -8,6 +8,7 @@ const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
@@ -15,19 +16,20 @@ const UserDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // ✅ Fetch logged-in user details
+        // ✅ Fetch logged-in user
         const userRes = await axios.get("http://localhost:8080/api/users/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(userRes.data);
 
-        // ✅ Fetch bookings for logged-in user
+        // ✅ Fetch user bookings
         const bookingsRes = await axios.get("http://localhost:8080/api/bookings/my", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setBookings(bookingsRes.data);
+        setBookings(Array.isArray(bookingsRes.data) ? bookingsRes.data : []);
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
+        setError("Failed to load dashboard. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -48,8 +50,9 @@ const UserDashboard = () => {
   return (
     <Container className="mt-5">
       <h2 className="mb-4">Welcome, {user?.name} 👋</h2>
+      {error && <Alert variant="danger">{error}</Alert>}
 
-      {/* Quick Links Section */}
+      {/* Quick Links */}
       <Row className="mb-4 g-3">
         <Col xs={6} md={3}>
           <Card className="shadow-sm text-center h-100">
@@ -93,7 +96,7 @@ const UserDashboard = () => {
         </Col>
       </Row>
 
-      {/* Recent Bookings Section */}
+      {/* Recent Bookings */}
       <h4 className="mb-3">Recent Bookings</h4>
       <Row>
         {bookings.length > 0 ? (
@@ -104,16 +107,13 @@ const UserDashboard = () => {
                   <Card.Title>{b.bus?.busName || "Bus"}</Card.Title>
                   <Card.Text>
                     <strong>Route:</strong> {b.route?.origin} → {b.route?.destination} <br />
-                    <strong>Date:</strong> {b.date}
+                    <strong>Date:</strong>{" "}
+                    {b.date ? new Date(b.date).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }) : "N/A"}
                   </Card.Text>
-                  <Button
-                    variant="outline-primary"
-                    size="sm"
-                    className="w-100"
-                    onClick={() => navigate(`/bookings/${b.id}`)} // ✅ View Ticket
-                  >
-                    View Ticket
-                  </Button>
                 </Card.Body>
               </Card>
             </Col>

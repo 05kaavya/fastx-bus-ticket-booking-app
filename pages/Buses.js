@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Container, Row, Col } from "react-bootstrap";
-import { getAllBuses } from "../services/busService";
-import { getAllRoutes } from "../services/routeService";
-import { useNavigate } from "react-router-dom";
+import { Card, Container, Row, Col, Spinner, Alert } from "react-bootstrap";
+import { busService, routeService } from "../services/busService";
 
 const Buses = () => {
   const [buses, setBuses] = useState([]);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     loadData();
@@ -14,22 +13,43 @@ const Buses = () => {
 
   const loadData = async () => {
     try {
-      const busesRes = await getAllBuses();
-      const routesRes = await getAllRoutes();
+      setLoading(true);
+      const busesData = await busService.getAllBuses();
+      const routesData = await routeService.getAllRoutes();
 
-      // merge routes into buses
-      const merged = busesRes.data.map((bus) => {
-        const busRoutes = routesRes.data.filter(
-          (r) => r.bus.busId === bus.busId
+      // Merge routes into buses
+      const merged = busesData.map((bus) => {
+        const busRoutes = routesData.filter(
+          (r) => r.bus && r.bus.busId === bus.busId
         );
         return { ...bus, routes: busRoutes };
       });
 
       setBuses(merged);
     } catch (err) {
+      setError("Failed to load buses and routes data");
       console.error("Error loading buses/routes", err);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <Container className="text-center mt-5">
+        <Spinner animation="border" />
+        <p>Loading buses...</p>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container className="mt-5">
+        <Alert variant="danger">{error}</Alert>
+      </Container>
+    );
+  }
 
   return (
     <Container className="mt-5">
@@ -38,7 +58,7 @@ const Buses = () => {
         {buses.length > 0 ? (
           buses.map((bus) => (
             <Col md={6} key={bus.busId} className="mb-4">
-              <Card className="shadow-sm">
+              <Card className="shadow-sm h-100">
                 <Card.Body>
                   <Card.Title>{bus.busName}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
@@ -50,39 +70,38 @@ const Buses = () => {
                   </Card.Text>
 
                   {bus.routes && bus.routes.length > 0 ? (
-                    bus.routes.map((route) => (
-                      <Card key={route.routeId} className="mb-2 p-2">
-                        <Card.Text>
-                          <strong>Route:</strong> {route.origin} →{" "}
-                          {route.destination} <br />
-                          <strong>Departure:</strong>{" "}
-                          {new Date(route.departureTime).toLocaleString()} <br />
-                          <strong>Arrival:</strong>{" "}
-                          {new Date(route.arrivalTime).toLocaleString()} <br />
-                          <strong>Fare:</strong> ₹{route.fare}
-                        </Card.Text>
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          onClick={() =>
-                            navigate(
-                              `/bookings/add?busId=${bus.busId}&routeId=${route.routeId}`
-                            )
-                          }
-                        >
-                          Book Seat
-                        </Button>
-                      </Card>
-                    ))
+                    <div>
+                      <h6>Available Routes:</h6>
+                      {bus.routes.map((route) => (
+                        <Card key={route.routeId} className="mb-2 p-2 bg-light">
+                          <Card.Text className="mb-1">
+                            <strong>Route:</strong> {route.origin} → {route.destination}
+                          </Card.Text>
+                          <Card.Text className="mb-1">
+                            <strong>Departure:</strong>{" "}
+                            {new Date(route.departureTime).toLocaleString()}
+                          </Card.Text>
+                          <Card.Text className="mb-1">
+                            <strong>Arrival:</strong>{" "}
+                            {new Date(route.arrivalTime).toLocaleString()}
+                          </Card.Text>
+                          <Card.Text className="mb-2">
+                            <strong>Fare:</strong> ₹{route.fare}
+                          </Card.Text>
+                        </Card>
+                      ))}
+                    </div>
                   ) : (
-                    <p>No routes available for this bus</p>
+                    <p className="text-muted">No routes available for this bus</p>
                   )}
                 </Card.Body>
               </Card>
             </Col>
           ))
         ) : (
-          <p>No buses available at the moment.</p>
+          <Col>
+            <Alert variant="info">No buses available at the moment.</Alert>
+          </Col>
         )}
       </Row>
     </Container>
