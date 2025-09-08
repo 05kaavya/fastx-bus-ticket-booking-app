@@ -4,6 +4,7 @@ import com.hexaware.fastx.dto.AdminDto;
 import com.hexaware.fastx.entities.Admin;
 import com.hexaware.fastx.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class AdminRestController {
     @Autowired
     private IAdminService service;
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/register")
     public Admin addAdmin(@RequestBody AdminDto dto) {
         return service.addAdmin(dto.toEntity());

@@ -15,5 +15,8 @@ public interface ICancellationService {
     public List<Cancellation> getCancellationsByStatus(String refundStatus);
     public boolean isBookingCancelled(int bookingId);
     public BigDecimal getTotalRefundsIssuedByDate(LocalDate cancellationDate);
+	public boolean processRefund(int cancellationId);
+	public List<Cancellation> getAllCancellations();
+	public Cancellation updateRefundStatus(int cancellationId, String newStatus);
 
 }

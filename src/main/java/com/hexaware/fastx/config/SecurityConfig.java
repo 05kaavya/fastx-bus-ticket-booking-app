@@ -30,71 +30,72 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    
     }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-        .cors(cors -> {}) // 👈 enable CORS
-                .authorizeHttpRequests(auth -> auth
-                		// Public endpoints
-                        .requestMatchers("/auth/**", "/api/users/register", "/api/admins/register",
-                                         "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        
-                     // USER endpoints (also allow ADMIN to access these)
-                        .requestMatchers("/api/users/me").hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/api/buses/getall", "/api/buses/get/**", "/api/buses/name/**").hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/api/routes/getall", "/api/routes/get/**").hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/api/bookings/add", "/api/bookings/update", "/api/bookings/delete/**").hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/api/payments/**", "/api/cancellations/**").hasAnyAuthority("USER", "ADMIN")
-                        .requestMatchers("/api/seats/bus/**").hasAnyAuthority("USER", "ADMIN")
-
-                        // ADMIN-only endpoints
-                        .requestMatchers("/api/admins/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/buses/add", "/api/buses/update", "/api/buses/delete/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/routes/add", "/api/routes/delete/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/bus-operators/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/seats/add", "/api/seats/update", "/api/seats/delete/**","/api/seats/bus/{busId}").hasAuthority("ADMIN")
-                        
-						/*
-						 * // USER endpoints .requestMatchers("/api/users/me").hasAuthority("USER")
-						 * .requestMatchers("/api/buses/getall", "/api/buses/get/**",
-						 * "/api/buses/name/**").hasAuthority("USER")
-						 * .requestMatchers("/api/routes/getall",
-						 * "/api/routes/get/**").hasAuthority("USER")
-						 * .requestMatchers("/api/bookings/add", "/api/bookings/update",
-						 * "/api/bookings/delete/**").hasAuthority("USER")
-						 * .requestMatchers("/api/payments/**",
-						 * "/api/cancellations/**").hasAuthority("USER")
-						 * .requestMatchers("/api/seats/bus/**").hasAuthority("USER")
-						 * 
-						 * // ADMIN management endpoints
-						 * .requestMatchers("/api/admins/**").hasAuthority("ADMIN")
-						 * .requestMatchers("/api/buses/add", "/api/buses/update",
-						 * "/api/buses/delete/**").hasAuthority("ADMIN")
-						 * .requestMatchers("/api/routes/add",
-						 * "/api/routes/delete/**").hasAuthority("ADMIN")
-						 * .requestMatchers("/api/bus-operators/**").hasAuthority("ADMIN")
-						 * .requestMatchers("/api/seats/add", "/api/seats/update",
-						 * "/api/seats/delete/**").hasAuthority("ADMIN")
-						 * 
-						 * // ADMIN getall endpoints (view everything) .requestMatchers(
-						 * "/api/buses/getall", "/api/routes/getall", "/api/seats/getall",
-						 * "/api/bookings/getall", "/api/users/getall", "/api/payments/getall",
-						 * "/api/cancellations/getall", "/api/bus-operators/getall",
-						 * "/api/bookingseat/getall" ).hasAuthority("ADMIN")
-						 */
-                        
-                        // All other requests require authentication
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            .cors(cors -> {}) 
+            .authorizeHttpRequests(auth -> auth
+            	    // Public endpoints (login & register)
+            	    .requestMatchers(HttpMethod.POST,
+            	        "/auth/login",
+            	        "/auth/admin/login",
+            	        "/auth/operator/login",
+            	        "/api/users/register",
+            	        "/api/admins/register",
+            	        "/api/bus-operators/add",
+            	        "/api/seats/verify-availability"
+            	    ).permitAll()
+            	    
+            	    // Swagger
+            	    .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+            	    
+            	    // Other endpoints require authentication
+            	    .anyRequest().authenticated()
+            	)
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 }
+						
+						 
+          
+
+
+/*
+ * // USER endpoints .requestMatchers("/api/users/me").hasAuthority("USER")
+ * .requestMatchers("/api/buses/getall", "/api/buses/get/**",
+ * "/api/buses/name/**").hasAuthority("USER")
+ * .requestMatchers("/api/routes/getall",
+ * "/api/routes/get/**").hasAuthority("USER")
+ * .requestMatchers("/api/bookings/add", "/api/bookings/update",
+ * "/api/bookings/delete/**").hasAuthority("USER")
+ * .requestMatchers("/api/payments/**",
+ * "/api/cancellations/**").hasAuthority("USER")
+ * .requestMatchers("/api/seats/bus/**").hasAuthority("USER")
+ * 
+ * // ADMIN management endpoints
+ * .requestMatchers("/api/admins/**").hasAuthority("ADMIN")
+ * .requestMatchers("/api/buses/add", "/api/buses/update",
+ * "/api/buses/delete/**").hasAuthority("ADMIN")
+ * .requestMatchers("/api/routes/add",
+ * "/api/routes/delete/**").hasAuthority("ADMIN")
+ * .requestMatchers("/api/bus-operators/**").hasAuthority("ADMIN")
+ * .requestMatchers("/api/seats/add", "/api/seats/update",
+ * "/api/seats/delete/**").hasAuthority("ADMIN")
+ * 
+ * // ADMIN getall endpoints (view everything) .requestMatchers(
+ * "/api/buses/getall", "/api/routes/getall", "/api/seats/getall",
+ * "/api/bookings/getall", "/api/users/getall", "/api/payments/getall",
+ * "/api/cancellations/getall", "/api/bus-operators/getall",
+ * "/api/bookingseat/getall" ).hasAuthority("ADMIN")
+ */
 
 
 /*

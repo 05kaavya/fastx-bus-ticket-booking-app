@@ -43,12 +43,19 @@ public class BusServiceImpl implements IBusService {
     public Bus addBus(Bus bus) {
         log.info("Adding bus: {}", bus.getBusName());
         
-        if (bus.getOperator() != null && bus.getOperator().getOperatorId() > 0) {
-            BusOperator operator = busOperatorService.getOperatorById(bus.getOperator().getOperatorId());
-            bus.setOperator(operator);
-        } else {
-            throw new ResourceNotFoundException("Operator ID is missing or invalid while adding bus");
+        
+        if (bus.getOperator() == null || bus.getOperator().getOperatorId() == 0) {
+            throw new IllegalArgumentException("Bus must have an operator assigned");
         }
+        
+		/*
+		 * if (bus.getOperator() != null && bus.getOperator().getOperatorId() > 0) {
+		 * BusOperator operator =
+		 * busOperatorService.getOperatorById(bus.getOperator().getOperatorId());
+		 * bus.setOperator(operator); } else { throw new
+		 * ResourceNotFoundException("Operator ID is missing or invalid while adding bus"
+		 * ); }
+		 */
         return busRepository.save(bus);
     }
 

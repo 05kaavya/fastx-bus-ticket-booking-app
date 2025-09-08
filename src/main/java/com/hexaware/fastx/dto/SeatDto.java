@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 import com.hexaware.fastx.entities.Bus;
 import com.hexaware.fastx.entities.Seat;
 
@@ -31,6 +33,8 @@ public class SeatDto {
 
     @Pattern(regexp = "^(Available|Booked)$")
     private String seatStatus;
+    
+  //  private LocalDate travelDate; 
 
 	
 	  public Seat toEntity(Bus bus) { 
@@ -39,6 +43,7 @@ public class SeatDto {
 	  seat.setSeatNumber(this.seatNumber); 
 	  seat.setSeatType(this.seatType);
 	  seat.setSeatStatus(this.seatStatus);
+	  //seat.setTravelDate(this.travelDate);
 	  seat.setBus(bus);
 	  return seat; 
 	  }
@@ -49,6 +54,7 @@ public class SeatDto {
 	        dto.setSeatNumber(seat.getSeatNumber());
 	        dto.setSeatStatus(seat.getSeatStatus());
 	        dto.setSeatType(seat.getSeatType());
+	       // dto.setTravelDate(seat.getTravelDate()); 
 	        dto.setBusId(seat.getBus().getBusId());
 	        return dto;
 	    }
