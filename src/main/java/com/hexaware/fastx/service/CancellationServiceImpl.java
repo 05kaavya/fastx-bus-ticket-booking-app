@@ -1,10 +1,12 @@
 package com.hexaware.fastx.service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import com.hexaware.fastx.repository.BookingRepository;
 import com.hexaware.fastx.repository.CancellationRepository;
 import com.hexaware.fastx.repository.PaymentRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -59,12 +62,19 @@ public class CancellationServiceImpl implements ICancellationService {
       Booking booking = bookingRepository.findById(bookingId)
           .orElseThrow(() -> new ResourceNotFoundException("Booking not found with ID: " + bookingId));
 
+      
+   // Update booking status
+      booking.setStatus("Cancelled");
+      bookingRepository.save(booking);
+      
       // Fetch payment
       Payment payment = paymentRepository.findById(paymentId)
           .orElseThrow(() -> new ResourceNotFoundException("Payment not found with ID: " + paymentId));
 
-      // Attach managed entities
+      // Save cancellation entry
       cancellation.setBooking(booking);
+      cancellation.setCancellationDate(Timestamp.valueOf(LocalDateTime.now()));
+      cancellation.setRefundStatus("Pending"); // or NULL
       cancellation.setPayment(payment);
 
       return cancellationRepository.save(cancellation);
@@ -119,5 +129,45 @@ public class CancellationServiceImpl implements ICancellationService {
         LocalDateTime startDate = cancellationDate.atStartOfDay();
         LocalDateTime endDate = cancellationDate.atTime(LocalTime.MAX);
         return cancellationRepository.findTotalRefundsIssuedByCancellationDate(startDate, endDate);
+    }
+    
+ // Add to your ICancellationService implementation
+
+    @Override
+    public List<Cancellation> getAllCancellations() {
+        return cancellationRepository.findAll();
+    }
+
+    @Override
+    public boolean processRefund(int cancellationId) {
+        Optional<Cancellation> optionalCancellation = cancellationRepository.findById(cancellationId);
+        
+        if (optionalCancellation.isPresent()) {
+            Cancellation cancellation = optionalCancellation.get();
+            cancellation.setRefundStatus("Refunded");
+            cancellationRepository.save(cancellation);
+            
+            // Update the booking status to "Refunded"
+            Booking booking = cancellation.getBooking();
+            booking.setStatus("Refunded");
+            bookingRepository.save(booking);
+            
+            return true;
+        }
+        
+        return false;
+    }
+
+    @Override
+    public Cancellation updateRefundStatus(int cancellationId, String status) {
+        Optional<Cancellation> optionalCancellation = cancellationRepository.findById(cancellationId);
+        
+        if (optionalCancellation.isPresent()) {
+            Cancellation cancellation = optionalCancellation.get();
+            cancellation.setRefundStatus(status);
+            return cancellationRepository.save(cancellation);
+        }
+        
+        throw new EntityNotFoundException("Cancellation not found with ID: " + cancellationId);
     }
 }

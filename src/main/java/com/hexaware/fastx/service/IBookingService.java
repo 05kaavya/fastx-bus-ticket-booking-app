@@ -12,7 +12,7 @@ public interface IBookingService {
     public Booking getBookingById(int bookingId);
     public List<Booking> getAllBookings();
     public String deleteByBookingId(int bookingId);
-    public List<Booking> getBookingsByUserEmail(String email);
+	public List<Booking> findBookingsByUserEmail(String email);
 
      
 }

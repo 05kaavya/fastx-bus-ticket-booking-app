@@ -51,6 +51,23 @@ public class AuthController {
             throw new RuntimeException("Invalid admin credentials");
         }
     }
+    
+ // ✅ Operator login
+    @PostMapping("/operator/login")
+    public AuthResponse loginOperator(@RequestBody AuthRequest request) {
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+
+        if (auth.isAuthenticated()) {
+            UserDetails operatorDetails = (UserDetails) auth.getPrincipal();
+            String token = jwtService.generateToken(operatorDetails);
+            return new AuthResponse(token);
+        } else {
+            throw new RuntimeException("Invalid operator credentials");
+        }
+    }
+
 }
 
 

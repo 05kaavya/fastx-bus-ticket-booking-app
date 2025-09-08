@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,43 +21,61 @@ import java.util.List;
 public class BookingRestController {
 
     @Autowired
-    private IBookingService service;
+    private IBookingService bookingservice;
 
-    @PostMapping("/add")
-    public Booking addBooking( @Valid @RequestBody BookingDto dto) {
-    	   log.info("Adding booking for user ID: {}", dto.getUserId());
-           return service.addBooking(dto);
-       }
+	/*
+	 * @PreAuthorize("hasAuthority('USER')")
+	 * 
+	 * @PostMapping("/add") public Booking addBooking( @Valid @RequestBody
+	 * BookingDto dto) { log.info("Adding booking for user ID: {}",
+	 * dto.getUserId()); return service.addBooking(dto); }
+	 */
 
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/update")
     public Booking updateBooking( @Valid @RequestBody BookingDto dto) {
     	 log.info("Updating booking ID: {}", dto.getBookingId());
-         return service.updateBooking(dto.toEntity());
+         return bookingservice.updateBooking(dto.toEntity());
      }
 
+    @PreAuthorize("hasAuthority('USER','ADMIN')")
     @GetMapping("/get/{bookingId}")
     public Booking getBookingById(@PathVariable int bookingId) {
     	log.info("Fetching booking by ID: {}", bookingId);
-        return service.getBookingById(bookingId);
+        return bookingservice.getBookingById(bookingId);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getall")
     public List<Booking> getAllBookings() {
     	log.info("Fetching all bookings");
-        return service.getAllBookings();
+        return bookingservice.getAllBookings();
     }
 
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @DeleteMapping("/delete/{bookingId}")
     public String deleteBooking(@PathVariable int bookingId) {
     	log.info("Deleting booking ID: {}", bookingId);
-        return service.deleteByBookingId(bookingId);
+        return bookingservice.deleteByBookingId(bookingId);
     }
     
+ // ✅ Return bookings for the logged-in user
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/my")
-    public List<Booking> getMyBookings(@AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails) {
-        log.info("Fetching bookings for logged-in user: {}", userDetails.getUsername());
-        return service.getBookingsByUserEmail(userDetails.getUsername()); // implement this in service
+    public List<Booking> getMyBookings(Authentication authentication) {
+        String email = authentication.getName(); 
+        return bookingservice.findBookingsByUserEmail(email);
     }
+    
+	/*
+	 * @GetMapping("/my") public List<Booking>
+	 * getMyBookings(@AuthenticationPrincipal
+	 * org.springframework.security.core.userdetails.User userDetails) {
+	 * log.info("Fetching bookings for logged-in user: {}",
+	 * userDetails.getUsername()); return
+	 * service.getBookingsByUserEmail(userDetails.getUsername()); // implement this
+	 * in service }
+	 */
 
 
 }

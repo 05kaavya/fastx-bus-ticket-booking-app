@@ -7,11 +7,15 @@ import com.hexaware.fastx.service.ICancellationService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -21,6 +25,7 @@ public class CancellationRestController {
     @Autowired
     private ICancellationService service;
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/cancel")
     public Cancellation cancelBooking(@RequestBody CancellationDto dto) {
     	
@@ -28,6 +33,7 @@ public class CancellationRestController {
            return service.cancelBooking(dto.toEntity());
        }
 
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN') or hasAuthority('OPERATOR')")
     @GetMapping("/booking/{bookingId}")
     public Cancellation getCancellationByBookingId(@PathVariable int bookingId) {
     	 log.info("Fetching cancellation for booking ID: {}", bookingId);
@@ -54,6 +60,43 @@ public class CancellationRestController {
     @GetMapping("/totalRefunds/{cancellationDate}")
     public BigDecimal getTotalRefundsIssuedByDate(@PathVariable LocalDate cancellationDate) {
         return service.getTotalRefundsIssuedByDate(cancellationDate);
+    }
+    
+ // Add this to your CancellationRestController
+    @PreAuthorize("hasAuthority('OPERATOR')")
+    @PostMapping("/{cancellationId}/refund")
+    public ResponseEntity<String> processRefund(@PathVariable int cancellationId) {
+        log.info("Processing refund for cancellation ID: {}", cancellationId);
+        
+        boolean success = service.processRefund(cancellationId);
+        
+        if (success) {
+            return ResponseEntity.ok("Refund processed successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to process refund");
+        }
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Cancellation> getAllCancellations() {
+        log.info("Fetching all cancellations");
+        return service.getAllCancellations();
+    }
+    
+    @PreAuthorize("hasAuthority('OPERATOR')")
+    @PutMapping("/{cancellationId}/status")
+    public ResponseEntity<Cancellation> updateRefundStatus(
+            @PathVariable int cancellationId, 
+            @RequestBody Map<String, String> statusUpdate) {
+        
+        log.info("Updating refund status for cancellation ID: {}", cancellationId);
+        
+        String newStatus = statusUpdate.get("status");
+        Cancellation updatedCancellation = service.updateRefundStatus(cancellationId, newStatus);
+        
+        return ResponseEntity.ok(updatedCancellation);
     }
 }
 

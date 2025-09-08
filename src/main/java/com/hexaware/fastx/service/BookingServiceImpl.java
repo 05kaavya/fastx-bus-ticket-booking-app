@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import com.hexaware.fastx.dto.BookingDto;
 import com.hexaware.fastx.entities.Booking;
 import com.hexaware.fastx.entities.Route;
+import com.hexaware.fastx.entities.Seat;
 import com.hexaware.fastx.entities.User;
 import com.hexaware.fastx.exception.ResourceNotFoundException;
 import com.hexaware.fastx.repository.BookingRepository;
 import com.hexaware.fastx.repository.RouteRepository;
+import com.hexaware.fastx.repository.SeatRepository;
 import com.hexaware.fastx.repository.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +41,9 @@ public class BookingServiceImpl implements IBookingService {
     @Autowired
     BookingRepository bookingRepository;
     
-   
+    @Autowired
+    SeatRepository seatRepository;
+    
 
     @Autowired
     UserRepository userRepository;
@@ -67,7 +71,20 @@ public class BookingServiceImpl implements IBookingService {
         Booking booking = bookingDto.toEntity();
         booking.setUser(user);
         booking.setRoute(route);
+        
+     // ✅ Fix passenger count
+        if (bookingDto.getPassengerCount() > 0) {
+            booking.setPassengerCount(bookingDto.getPassengerCount());
+        } else if (booking.getSeats() != null) {
+            booking.setPassengerCount(booking.getSeats().size());
+        }
 
+        
+        if (bookingDto.getSeatIds() != null && !bookingDto.getSeatIds().isEmpty()) {
+            List<Seat> seats = seatRepository.findAllById(bookingDto.getSeatIds());
+            booking.setSeats(seats);
+        }
+        
         return bookingRepository.save(booking);
     }
 
@@ -108,8 +125,12 @@ public class BookingServiceImpl implements IBookingService {
     }
     
     @Override
-    public List<Booking> getBookingsByUserEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        return bookingRepository.findByUser(user);
+    public List<Booking> findBookingsByUserEmail(String email) {
+        return bookingRepository.findByUserEmail(email);
     }
+	/*
+	 * @Override public List<Booking> getBookingsByUserEmail(String email) { User
+	 * user = userRepository.findByEmail(email).orElseThrow(); return
+	 * bookingRepository.findByUser(user); }
+	 */
 }

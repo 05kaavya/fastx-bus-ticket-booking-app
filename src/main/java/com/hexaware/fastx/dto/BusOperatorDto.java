@@ -40,6 +40,7 @@ public class BusOperatorDto {
 	  operator.setOperatorId(this.operatorId); 
 	  operator.setOperatorName(this.operatorName);
 	  operator.setEmail(this.email); 
+	  operator.setPassword(this.password);
 	  operator.setContactNumber(this.contactNumber);
 	  operator.setAddress(this.address);
 	  operator.setRole(this.role);
