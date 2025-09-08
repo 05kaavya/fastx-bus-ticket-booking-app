@@ -64,4 +64,6 @@ export const adminService = {
   getSeatsByType: (type) => api.get(`/seats/type/${type}`),
 };
 
+
+
 export default adminService;

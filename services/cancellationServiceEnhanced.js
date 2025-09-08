@@ -1,5 +1,4 @@
 // src/services/cancellationServiceEnhanced.js
-import axios from "axios";
 import { 
   cancelBooking, 
   getCancellationByBookingId, 
@@ -8,14 +7,6 @@ import {
   isBookingCancelled, 
   getTotalRefundsIssuedByDate 
 } from "./cancellationService";
-
-const API_URL = "http://localhost:8080/api/cancellations";
-
-// Set token in headers
-const authHeader = () => {
-  const token = localStorage.getItem("token");
-  return { headers: { Authorization: `Bearer ${token}` } };
-};
 
 // Enhanced cancellation service with additional methods
 const cancellationServiceEnhanced = {

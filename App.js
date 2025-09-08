@@ -5,25 +5,33 @@ import BusSearch from './components/BusSearch';
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminLogin from "./pages/AdminLogin";
+import BusOperatorLogin from './pages/operator/BusOperatorLogin';
+import EditBuses from "./pages/operator/EditBuses";
+import EditRoutes from "./pages/operator/EditRoutes";
+import ViewBookings from "./pages/operator/ViewBookings";
 import Buses from "./pages/Buses";
+import Cancellations from "./pages/Cancellations";
 import RoutesPage from "./pages/Routes";
 import Bookings from "./pages/Bookings";
-import Payments from "./pages/Payments";
+import Payment from "./pages/Payment";
+import BookingSuccess from './pages/BookingSuccess';
 import AdminDashboard from "./pages/AdminDashboard";
 import UserDashboard from "./pages/UserDashboard";
+import OperatorDashboard from './pages/operator/OperatorDashboard';
 import Profile from "./pages/Profile"; 
-//import UsersPage from "./pages/Users";
-//import OperatorsPage from "./pages/Operators";
+
 import SeatsPage from "./pages/Seats";
 import Navbar from "./components/Navbar";
+
 import PrivateRoute from "./components/PrivateRoute";
-// Add these imports to your App.js
+
 import ManageBuses from './pages/admin/ManageBuses';
 import ManageRoutes from './pages/admin/ManageRoutes';
 import ManageBookings from './pages/admin/ManageBookings';
 import ManageUsers from './pages/admin/ManageUsers';
 import ManageOperators from './pages/admin/ManageOperators';
-import ManageSeats from './pages/admin/ManageSeats';
+import EditSeats from "./pages/operator/EditSeats";
+//import ViewBookings from "./pages/operator/EditBookings";
 
 function App() {
   return (
@@ -35,6 +43,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/operator/login" element={<BusOperatorLogin />} />
 
         {/* ------------------ USER ROUTES ------------------ */}
         <Route
@@ -95,12 +104,30 @@ function App() {
               <Bookings />
             </PrivateRoute>
           }
-        />
-        <Route
-          path="/payments"
+          />
+
+          <Route
+          path="/booking-success"
           element={
             <PrivateRoute role="USER">
-              <Payments />
+              <BookingSuccess />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/payment"
+          element={
+            <PrivateRoute role="USER">
+              <Payment />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/cancel-booking"
+          element={
+            <PrivateRoute role="USER">
+              <Cancellations />
             </PrivateRoute>
           }
         />
@@ -148,14 +175,7 @@ function App() {
     </PrivateRoute>
   }
 />
-<Route
-  path="/admin/seats"
-  element={
-    <PrivateRoute role="ADMIN">
-      <ManageSeats />
-    </PrivateRoute>
-  }
-/>
+
         <Route
           path="/admin/dashboard"
           element={
@@ -164,6 +184,52 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        {/* ------------------ OPERATOR ROUTES ------------------ */}
+        <Route
+          path="/operator/dashboard"
+          element={
+            <PrivateRoute role="OPERATOR">
+              <OperatorDashboard />
+            </PrivateRoute>
+          }
+/>
+          <Route
+          path="/operator/editbuses"
+          element={
+            <PrivateRoute role="OPERATOR">
+              <EditBuses />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/operator/editroutes"
+          element={
+            <PrivateRoute role="OPERATOR">
+              <EditRoutes />
+            </PrivateRoute>
+          }
+        />
+        
+        <Route
+          path="/operator/editseats"
+          element={
+            <PrivateRoute role="OPERATOR">
+              <EditSeats/>
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/operator/viewbookings"
+          element={
+            <PrivateRoute role="OPERATOR">
+              <ViewBookings/>
+            </PrivateRoute>
+          }
+        />
+
         {/* <Route
           path="/admin/buses"
           element={
@@ -213,6 +279,7 @@ function App() {
           }
         /> */}
       </Routes>
+       {/* <Footer /> */}
     </>
   );
 }

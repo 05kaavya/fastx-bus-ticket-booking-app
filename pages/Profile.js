@@ -95,16 +95,15 @@ const Profile = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-  <Form.Label>Phone Number</Form.Label>
-  <Form.Control
-    type="text"
-    name="phone"
-    value={user?.phone || ""}
-    onChange={handleChange}
-    disabled={!editMode}   // 👈 visible always, editable only in editMode
-  />
-</Form.Group>
-
+              <Form.Label>Phone Number</Form.Label>
+              <Form.Control
+                type="text"
+                name="contactNumber"   // ✅ updated key
+                value={user?.contactNumber || ""}
+                onChange={handleChange}
+                disabled={!editMode}
+              />
+            </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Role</Form.Label>
@@ -112,7 +111,11 @@ const Profile = () => {
             </Form.Group>
 
             {!editMode ? (
-              <Button variant="secondary" className="w-100" onClick={() => setEditMode(true)}>
+              <Button
+                variant="secondary"
+                className="w-100"
+                onClick={() => setEditMode(true)}
+              >
                 Edit Profile
               </Button>
             ) : (

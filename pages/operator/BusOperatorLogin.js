@@ -1,13 +1,10 @@
-
-
-
-
+// src/pages/BusOperatorLogin.js
 import { useState } from "react";
-import { loginUser } from "../services/authService";
+import { loginBusOperator } from "../../services/authService";
 import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Container, Alert, Card, Row, Col } from "react-bootstrap";
 
-export default function Login() {
+export default function BusOperatorLogin() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,15 +22,16 @@ export default function Login() {
     setError("");
     
     try {
-      const res = await loginUser(form);
+      const res = await loginBusOperator(form);
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", "USER");
+      localStorage.setItem("role", "OPERATOR");
       localStorage.setItem("username", form.email.split('@')[0]);
+      localStorage.setItem("operatorId", res.data.operatorId); // Store operator ID for API calls
       
       // Show success message in session storage to display on the next page
-      sessionStorage.setItem("loginSuccess", "Login successful! Welcome back.");
+      sessionStorage.setItem("loginSuccess", "Bus operator login successful!");
       
-      navigate("/dashboard");
+      navigate("/operator/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials. Please try again.");
     } finally {
@@ -48,9 +46,9 @@ export default function Login() {
           <Card className="shadow-lg border-0 rounded-3">
             <Card.Body className="p-5">
               <div className="text-center mb-4">
-                <i className="fas fa-user-circle fa-3x text-primary mb-3"></i>
-                <h2 className="fw-bold">User Login</h2>
-                <p className="text-muted">Sign in to your account</p>
+                <i className="fas fa-bus fa-3x text-primary mb-3"></i>
+                <h2 className="fw-bold">Bus Operator Login</h2>
+                <p className="text-muted">Access your bus operator dashboard</p>
               </div>
               
               {error && (
@@ -69,7 +67,7 @@ export default function Login() {
                     value={form.email}
                     onChange={handleChange} 
                     required 
-                    placeholder="Enter your email"
+                    placeholder="Enter your operator email"
                     className="py-2"
                   />
                 </Form.Group>
@@ -85,11 +83,6 @@ export default function Login() {
                     placeholder="Enter your password"
                     className="py-2"
                   />
-                  {/* <div className="text-end mt-2">
-                    <Link to="/forgot-password" className="text-decoration-none small">
-                      Forgot Password?
-                    </Link>
-                  </div> */}
                 </Form.Group>
                 
                 <div className="d-grid gap-2">
@@ -116,10 +109,14 @@ export default function Login() {
                 
                 <div className="text-center mt-4">
                   <p className="mb-0">
-                    Don't have an account? 
-                    <Link to="/register" className="text-decoration-none fw-medium ms-1">
-                      Sign up now
-                    </Link>
+                    Don't have an operator account? 
+                    <Button 
+                      variant="link" 
+                      className="p-0 ms-1 text-decoration-none"
+                      onClick={() => navigate("/operator/register")}
+                    >
+                      Register Here
+                    </Button>
                   </p>
                   
                   <hr className="my-4" />

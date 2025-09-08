@@ -2,6 +2,197 @@
 .app-navbar {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   padding: 0.5rem 0;
+  background: linear-gradient(135deg, #343a40 0%, #23272b 100%) !important;
+  border-bottom: 1px solid #495057;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(45deg, #ffffff, #e3f2fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.back-button {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.3s ease;
+  border: 1px solid #6c757d;
+}
+
+.back-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(-2px);
+}
+
+.nav-link-custom {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem !important;
+  margin: 0 0.2rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link-custom:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #4da6ff, #007bff);
+  transition: width 0.3s ease;
+}
+
+.nav-link-custom:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
+}
+
+.nav-link-custom:hover:before {
+  width: 100%;
+}
+
+.user-dropdown {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  border: 1px solid #6c757d;
+  font-weight: 500;
+}
+
+.user-dropdown:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.role-badge {
+  font-size: 0.65rem;
+  padding: 0.35em 0.65em;
+}
+
+.dropdown-menu-custom {
+  background-color: #343a40;
+  border: 1px solid #495057;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dropdown-header-custom {
+  background-color: #2c3136;
+  border-bottom: 1px solid #495057;
+}
+
+.dropdown-item-custom {
+  color: #e9ecef;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.dropdown-item-custom:hover {
+  background: linear-gradient(90deg, #007bff, #4da6ff);
+  color: #fff;
+  padding-left: 1.25rem;
+}
+
+.logout-item {
+  color: #ff6b6b;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.logout-item:hover {
+  background-color: #dc3545;
+  color: white;
+  padding-left: 1.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .navbar-collapse {
+    padding: 1rem 0;
+  }
+  
+  .nav-link-custom {
+    margin: 0.2rem 0;
+    justify-content: center;
+  }
+  
+  .user-dropdown {
+    margin-top: 0.5rem;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .dropdown-menu-custom {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .back-button {
+    margin-right: 0.5rem !important;
+  }
+}
+
+/* Animation for navbar items */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-nav .nav-item {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.navbar-nav .nav-item:nth-child(1) { animation-delay: 0.1s; }
+.navbar-nav .nav-item:nth-child(2) { animation-delay: 0.2s; }
+.navbar-nav .nav-item:nth-child(3) { animation-delay: 0.3s; }
+.navbar-nav .nav-item:nth-child(4) { animation-delay: 0.4s; }
+
+/* Subtle pulse animation for brand */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.brand:hover {
+  animation: pulse 2s infinite;
+}
+
+/* AppNavbar.css
+.app-navbar {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 0;
 }
 
 .brand {
@@ -106,7 +297,48 @@
   animation: fadeIn 0.5s ease forwards;
 }
 
+/* Navbar.css */
+.refresh-button {
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.refresh-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.back-button {
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.back-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Make sure buttons are properly spaced */
+.app-navbar .container {
+  display: flex;
+  align-items: center;
+}
+
+.app-navbar .brand {
+  margin-right: auto;
+}
+
 .navbar-nav .nav-item:nth-child(1) { animation-delay: 0.1s; }
 .navbar-nav .nav-item:nth-child(2) { animation-delay: 0.2s; }
 .navbar-nav .nav-item:nth-child(3) { animation-delay: 0.3s; }
-.navbar-nav .nav-item:nth-child(4) { animation-delay: 0.4s; }
+.navbar-nav .nav-item:nth-child(4) { animation-delay: 0.4s; }  
