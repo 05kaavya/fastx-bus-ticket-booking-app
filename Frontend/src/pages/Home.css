@@ -1,0 +1,83 @@
+/* Home.css */
+.home-container {
+  min-height: 100vh;
+  color: #fff;
+}
+
+.navbar {
+  background-color: rgba(26, 26, 26, 0.9) !important;
+  backdrop-filter: blur(10px);
+  padding: 15px 0;
+}
+
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.hero-section {
+  padding: 120px 0 80px;
+  text-align: center;
+}
+
+.booking-card {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  color: #333;
+}
+
+.booking-card .form-control, 
+.booking-card .form-select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.booking-card .btn-primary {
+  background-color: #0069d9;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.booking-card .btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.features {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.feature-item {
+  transition: transform 0.3s;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+}
+
+.feature-item i {
+  color: #0069d9;
+}
+
+.footer {
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 80px 0 40px;
+  }
+  
+  .display-4 {
+    font-size: 2.5rem;
+  }
+}
