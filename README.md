@@ -69,13 +69,13 @@ Relationships with foreign key constraints
 Tables: users, buses, routes, seats, bookings, booking_seats, payments, cancellations, admins, bus_operators
 
 
-fastx-frontend/
+**fastx-frontend/
  ├── src/
  │   ├── components/        # Reusable UI components
  │   ├── pages/             # Screens (Login, Register, Bookings, Seats, Payment etc.)
  │   ├── services/          # Axios services for API calls
  │   ├── App.js             # Route configuration
- │   └── index.js           # App entry point
+ │   └── index.js           # App entry point**
 
 fastx-backend/
  ├── src/main/java/com/hexaware/fastx/
